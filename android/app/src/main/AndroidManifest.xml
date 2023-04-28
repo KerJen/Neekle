@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.neekle">
+    package="com.iankin.neekle">
    <application
         android:label="neekle"
         android:name="${applicationName}"
