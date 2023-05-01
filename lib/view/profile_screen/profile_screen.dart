@@ -6,8 +6,10 @@ import '../../core/di/di.dart';
 import '../../core/ui/colors.dart';
 import '../../core/ui/const.dart';
 import '../../core/ui/kit/bouncing_gesture_detector.dart';
+import '../../core/ui/kit/loading_indicator.dart';
 import '../../core/ui/text_styles.dart';
 import 'cubit/cubit.dart';
+import 'qr_sheet.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -23,59 +25,138 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt.get<ProfileCubit>(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('0xFFFEFEFEFE9w9w'),
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 16,
-          ),
-          child: Column(
-            children: [
-              _ConnectWallet(
-                balance: null,
-                onConnect: () {},
+      child: BlocConsumer<ProfileCubit, ProfileState>(
+        listener: (context, state) async {
+          state.mapOrNull(
+            qr: (value) async {
+              QrSheet.show(context, data: value.data, cubit: context.read<ProfileCubit>());
+            },
+          );
+        },
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(state.mapOrNull(profile: (value) => value.profile?.address) ?? 'Profile'),
+              actions: [
+                if (state.mapOrNull(profile: (value) => value.profile != null) ?? false)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: IconButton(
+                      onPressed: () {
+                        context.read<ProfileCubit>().logOut();
+                      },
+                      icon: const Icon(
+                        Icons.logout,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 16,
               ),
-            ],
-          ),
+              child: Column(
+                children: [
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    child: state.mapOrNull(
+                          loading: (_) => const _ConnectWalletLoading(),
+                          profile: (value) {
+                            if (value.profile != null) {
+                              return _Wallet(balance: value.profile!.balance);
+                            }
+                            return null;
+                          },
+                        ) ??
+                        _ConnectWallet(
+                          onConnect: () => context.read<ProfileCubit>().createQR(),
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ConnectWalletLoading extends StatelessWidget {
+  const _ConnectWalletLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 56,
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: currentColorScheme(context).outlineVariant, width: 2),
+      ),
+      child: const LoadingIndicator(),
+    );
+  }
+}
+
+class _ConnectWallet extends StatelessWidget {
+  final VoidCallback onConnect;
+
+  const _ConnectWallet({
+    required this.onConnect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BouncingGestureDetector(
+      onTap: onConnect,
+      child: Container(
+        height: 56,
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: currentColorScheme(context).outlineVariant, width: 2),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Connect via WalletConnect',
+              style: medium.copyWith(fontWeight: FontWeight.w600),
+            ),
+            Icon(
+              Icons.keyboard_arrow_right,
+              color: currentColorScheme(context).onSurface,
+            )
+          ],
         ),
       ),
     );
   }
 }
 
-class _ConnectWallet extends StatelessWidget {
-  final double? balance;
-  final VoidCallback onConnect;
+class _Wallet extends StatelessWidget {
+  final double balance;
 
-  const _ConnectWallet({
-    this.balance,
-    required this.onConnect,
-  });
+  const _Wallet({required this.balance});
 
   @override
   Widget build(BuildContext context) {
-    Widget content;
-
-    if (balance == null) {
-      content = Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Connect via WalletConnect',
-            style: medium.copyWith(fontWeight: FontWeight.w600),
-          ),
-          Icon(
-            Icons.keyboard_arrow_right,
-            color: currentColorScheme(context).onSurface,
-          )
-        ],
-      );
-    } else {
-      content = Row(
+    return AnimatedContainer(
+      height: 56,
+      duration: const Duration(milliseconds: 200),
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: currentColorScheme(context).secondaryContainer,
+      ),
+      child: Row(
         children: [
           Text(
             'Wallet',
@@ -88,29 +169,13 @@ class _ConnectWallet extends StatelessWidget {
           SvgPicture.asset(ethereumIcon),
           const SizedBox(width: 4),
           Text(
-            '444.44',
+            balance.toStringAsFixed(5),
             style: medium.copyWith(
               color: currentColorScheme(context).onSecondaryContainer,
               fontWeight: FontWeight.w600,
             ),
           )
         ],
-      );
-    }
-
-    return BouncingGestureDetector(
-      onTap: balance != null ? onConnect : null,
-      child: AnimatedContainer(
-        height: 56,
-        duration: const Duration(milliseconds: 200),
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: balance == null ? Colors.transparent : currentColorScheme(context).secondaryContainer,
-          border: balance == null ? Border.all(color: currentColorScheme(context).outlineVariant, width: 2) : null,
-        ),
-        child: content,
       ),
     );
   }

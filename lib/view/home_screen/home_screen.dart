@@ -3,6 +3,7 @@ import 'package:neekle/core/ui/colors.dart';
 import 'package:neekle/core/ui/text_styles.dart';
 
 import '../profile_screen/profile_screen.dart';
+import '../shop_screen/shop_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          Container(),
+          ShopScreen(),
           Container(),
           ProfileScreen(),
         ],
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Divider(),
+          Container(height: 1, color: currentColorScheme(context).outlineVariant),
           NavigationBar(
             selectedIndex: _currentIndex,
             onDestinationSelected: (index) {

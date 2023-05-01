@@ -23,6 +23,12 @@ class MainApp extends StatelessWidget {
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: darkColorScheme,
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.white,
+        ),
+        bottomSheetTheme: const BottomSheetThemeData(
+          elevation: 2,
+        ),
         appBarTheme: AppBarTheme(
           backgroundColor: currentColorScheme(context).background,
           titleTextStyle: headline,
@@ -31,15 +37,23 @@ class MainApp extends StatelessWidget {
         textTheme: TextTheme(
           bodySmall: small,
           bodyMedium: medium,
-          bodyLarge: large,
+          bodyLarge: large.copyWith(color: currentColorScheme(context).onBackground),
           titleSmall: larger,
           titleMedium: title,
           titleLarge: headline,
         ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          hintStyle: medium.copyWith(color: currentColorScheme(context).onSurface),
+          labelStyle: medium.copyWith(color: currentColorScheme(context).onBackground),
+        ),
         navigationBarTheme: NavigationBarThemeData(
           backgroundColor: currentColorScheme(context).background,
           elevation: 0,
-          surfaceTintColor: Colors.transparent,
           labelTextStyle: MaterialStateProperty.resolveWith(
             (states) {
               final currentStyle = medium;

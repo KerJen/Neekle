@@ -13,7 +13,12 @@ final darkColorScheme = ColorScheme(
   onError: Colors.white,
   background: const Color(0xFF131621),
   onBackground: Colors.white,
+  surfaceVariant: const Color(0xFF191D2C),
   surface: const Color(0xFF23293E),
   onSurface: const Color(0xFF4B5475),
+  outline: const Color(0xFF4B5475),
   outlineVariant: const Color(0xFF23293E),
+  surfaceTint: Colors.transparent,
 );
+
+const yellowColor = Color(0xFFFFC700);

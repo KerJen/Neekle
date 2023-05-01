@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:injectable/injectable.dart';
@@ -15,4 +16,6 @@ abstract class FirebaseModule {
   FirebaseAuth get firebaseAuth => FirebaseAuth.instance;
 
   FirebaseFirestore get firebaseStore => FirebaseFirestore.instance;
+
+  FirebaseFunctions get functions => FirebaseFunctions.instance;
 }

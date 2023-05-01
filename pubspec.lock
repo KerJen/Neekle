@@ -281,6 +281,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  extended_image:
+    dependency: "direct main"
+    description:
+      name: extended_image
+      sha256: "75e4b0ad0f8f63eed7935ff2506c809a670f5e6dd0f61304525879d53fc41a17"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.2"
+  extended_image_library:
+    dependency: transitive
+    description:
+      name: extended_image_library
+      sha256: "550743b43ab093aed35ef234500fcc7a304cbac1eca47b0cc991e07e88750758"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.2"
   fake_async:
     dependency: transitive
     description:
@@ -382,6 +398,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  flutter_rating_bar:
+    dependency: "direct main"
+    description:
+      name: flutter_rating_bar
+      sha256: d2af03469eac832c591a1eba47c91ecc871fe5708e69967073c043b2d775ed93
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -457,13 +481,21 @@ packages:
     source: hosted
     version: "2.2.0"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
-      sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"
+      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.5"
+    version: "0.13.6"
+  http_client_helper:
+    dependency: transitive
+    description:
+      name: http_client_helper
+      sha256: "1f32359bd07a064ad256d1f84ae5f973f69bc972e7287223fa198abe1d969c28"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   http_multi_server:
     dependency: transitive
     description:
@@ -744,6 +776,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
+  qr:
+    dependency: transitive
+    description:
+      name: qr
+      sha256: "5c4208b4dc0d55c3184d10d83ee0ded6212dc2b5e2ba17c5a0c0aab279128d21"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  qr_flutter:
+    dependency: "direct main"
+    description:
+      name: qr_flutter
+      sha256: c5c121c54cb6dd837b9b9d57eb7bc7ec6df4aee741032060c8833a678c80b87e
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   recase:
     dependency: transitive
     description:
@@ -991,4 +1039,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=2.19.6 <3.0.0"
-  flutter: ">=3.7.0-0"
+  flutter: ">=3.7.0"
