@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ProfileEntity {
   String get address => throw _privateConstructorUsedError;
   double get balance => throw _privateConstructorUsedError;
+  List<AssetEntity> get showcase => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProfileEntityCopyWith<ProfileEntity> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $ProfileEntityCopyWith<$Res> {
           ProfileEntity value, $Res Function(ProfileEntity) then) =
       _$ProfileEntityCopyWithImpl<$Res, ProfileEntity>;
   @useResult
-  $Res call({String address, double balance});
+  $Res call({String address, double balance, List<AssetEntity> showcase});
 }
 
 /// @nodoc
@@ -48,6 +49,7 @@ class _$ProfileEntityCopyWithImpl<$Res, $Val extends ProfileEntity>
   $Res call({
     Object? address = null,
     Object? balance = null,
+    Object? showcase = null,
   }) {
     return _then(_value.copyWith(
       address: null == address
@@ -58,6 +60,10 @@ class _$ProfileEntityCopyWithImpl<$Res, $Val extends ProfileEntity>
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
               as double,
+      showcase: null == showcase
+          ? _value.showcase
+          : showcase // ignore: cast_nullable_to_non_nullable
+              as List<AssetEntity>,
     ) as $Val);
   }
 }
@@ -70,7 +76,7 @@ abstract class _$$_ProfileEntityCopyWith<$Res>
       __$$_ProfileEntityCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String address, double balance});
+  $Res call({String address, double balance, List<AssetEntity> showcase});
 }
 
 /// @nodoc
@@ -86,6 +92,7 @@ class __$$_ProfileEntityCopyWithImpl<$Res>
   $Res call({
     Object? address = null,
     Object? balance = null,
+    Object? showcase = null,
   }) {
     return _then(_$_ProfileEntity(
       address: null == address
@@ -96,6 +103,10 @@ class __$$_ProfileEntityCopyWithImpl<$Res>
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
               as double,
+      showcase: null == showcase
+          ? _value._showcase
+          : showcase // ignore: cast_nullable_to_non_nullable
+              as List<AssetEntity>,
     ));
   }
 }
@@ -103,16 +114,27 @@ class __$$_ProfileEntityCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ProfileEntity implements _ProfileEntity {
-  const _$_ProfileEntity({required this.address, required this.balance});
+  const _$_ProfileEntity(
+      {required this.address,
+      required this.balance,
+      required final List<AssetEntity> showcase})
+      : _showcase = showcase;
 
   @override
   final String address;
   @override
   final double balance;
+  final List<AssetEntity> _showcase;
+  @override
+  List<AssetEntity> get showcase {
+    if (_showcase is EqualUnmodifiableListView) return _showcase;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_showcase);
+  }
 
   @override
   String toString() {
-    return 'ProfileEntity(address: $address, balance: $balance)';
+    return 'ProfileEntity(address: $address, balance: $balance, showcase: $showcase)';
   }
 
   @override
@@ -121,11 +143,13 @@ class _$_ProfileEntity implements _ProfileEntity {
         (other.runtimeType == runtimeType &&
             other is _$_ProfileEntity &&
             (identical(other.address, address) || other.address == address) &&
-            (identical(other.balance, balance) || other.balance == balance));
+            (identical(other.balance, balance) || other.balance == balance) &&
+            const DeepCollectionEquality().equals(other._showcase, _showcase));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, address, balance);
+  int get hashCode => Object.hash(runtimeType, address, balance,
+      const DeepCollectionEquality().hash(_showcase));
 
   @JsonKey(ignore: true)
   @override
@@ -137,12 +161,15 @@ class _$_ProfileEntity implements _ProfileEntity {
 abstract class _ProfileEntity implements ProfileEntity {
   const factory _ProfileEntity(
       {required final String address,
-      required final double balance}) = _$_ProfileEntity;
+      required final double balance,
+      required final List<AssetEntity> showcase}) = _$_ProfileEntity;
 
   @override
   String get address;
   @override
   double get balance;
+  @override
+  List<AssetEntity> get showcase;
   @override
   @JsonKey(ignore: true)
   _$$_ProfileEntityCopyWith<_$_ProfileEntity> get copyWith =>

@@ -2,24 +2,24 @@ import 'dart:math';
 
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../core/error/failure.dart';
 import '../../domain/profile/entity/profile_entity.dart';
 import '../../domain/profile/repository/profile_repository.dart';
+import '../service/assets_service.dart';
 import '../service/auth_service.dart';
-import '../service/web3_service.dart';
+import '../service/statistics_service.dart';
 
 @LazySingleton(as: ProfileRepository)
 class ProfileRepositoryImpl extends ProfileRepository {
   final AuthService authService;
-  final Web3Service web3service;
+  final AssetsService assetsService;
+  final StatisticsService statisticsService;
 
-  ProfileRepositoryImpl({required this.authService, required this.web3service}) {
+  ProfileRepositoryImpl({required this.authService, required this.assetsService, required this.statisticsService}) {
     authService.walletSessionStatus().listen((session) async {
-      final message =
-          'Sign in with your Ethereum wallet to authenticate with Neekle. Nonce: ${Random().nextInt(100000)}';
-
-      final signature = await web3service.signMessage(message, session.accounts.first);
+      final signature = await authService.signSignInMessage(session.accounts.first);
 
       await authService.logIn(
         address: session.accounts.first,
@@ -31,15 +31,22 @@ class ProfileRepositoryImpl extends ProfileRepository {
 
   @override
   Stream<ProfileEntity?> currentProfile() {
-    return authService.authStateChanges().asyncMap((user) async {
-      ProfileEntity? profile;
+    final authStream = authService.authStateChanges();
+    // final showcaseStream = assetsService.getAssets(category, lastAssetId: lastAssetId, limit: limit)
 
-      if (user != null) {
-        final balance = await web3service.getBalance(user.uid);
-        profile = ProfileEntity(address: user.uid, balance: balance);
+    return authStream.flatMap((user) {
+      if (user == null) {
+        return Stream.value(null);
       }
 
-      return profile;
+      // ignore: discarded_futures
+      return Stream.fromFuture(statisticsService.getBalance(user.uid)).map(
+        (balance) => ProfileEntity(
+          address: user.uid,
+          balance: balance,
+          showcase: const [],
+        ),
+      );
     });
   }
 

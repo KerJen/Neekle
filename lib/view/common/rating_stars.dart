@@ -16,7 +16,7 @@ class RatingStars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RatingBarIndicator(
-      unratedColor: currentColorScheme(context).onSurface,
+      unratedColor: currentColorScheme(context).onSurface.withOpacity(0.4),
       rating: rating,
       itemBuilder: (context, index) => const Icon(
         Icons.star,

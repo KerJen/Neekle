@@ -15,7 +15,7 @@ class AppImage extends StatelessWidget {
     required this.image,
     this.height,
     this.width,
-    this.borderRadius,
+    this.borderRadius = BorderRadius.zero,
   });
 
   @override
@@ -49,8 +49,12 @@ class AppImage extends StatelessWidget {
               color: currentColorScheme(context).surface,
             ),
             child: Column(
-              children: const [
-                Icon(Icons.error),
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.error,
+                  color: currentColorScheme(context).onSurface,
+                ),
               ],
             ),
           );

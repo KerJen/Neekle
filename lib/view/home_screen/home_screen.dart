@@ -1,10 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:neekle/core/ui/colors.dart';
-import 'package:neekle/core/ui/text_styles.dart';
+import '../../core/ui/colors.dart';
+import '../../core/ui/text_styles.dart';
 
 import '../profile_screen/profile_screen.dart';
 import '../shop_screen/shop_screen.dart';
+import '../studio_screen/studio_screen.dart';
 
+@RoutePage()
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -20,9 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: [
+        children: const [
           ShopScreen(),
-          Container(),
+          StudioScreen(),
           ProfileScreen(),
         ],
       ),

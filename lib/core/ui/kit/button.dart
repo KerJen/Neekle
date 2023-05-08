@@ -7,7 +7,9 @@ class AppButton extends StatelessWidget {
   final double? height;
   final double? width;
   final BorderRadius? borderRadius;
+
   final Color? color;
+  final Alignment? alignment;
   final Widget child;
   final VoidCallback? onTap;
 
@@ -17,6 +19,7 @@ class AppButton extends StatelessWidget {
     this.width,
     this.borderRadius,
     this.color,
+    this.alignment,
     required this.child,
     this.onTap,
   });
@@ -28,6 +31,7 @@ class AppButton extends StatelessWidget {
       child: Container(
         height: height,
         width: width,
+        alignment: alignment,
         decoration: BoxDecoration(
           borderRadius: borderRadius,
           color: color ?? currentColorScheme(context).secondaryContainer,

@@ -22,3 +22,4 @@ final darkColorScheme = ColorScheme(
 );
 
 const yellowColor = Color(0xFFFFC700);
+final redColor = const Color(0xFFFF3D00).withOpacity(0.8);

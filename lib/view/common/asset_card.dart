@@ -1,7 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/ui/const.dart';
 import '../../core/ui/kit/bouncing_gesture_detector.dart';
+import '../../core/ui/router/router.dart';
+import '../../domain/assets/entity/asset_entity.dart';
 import 'rating_stars.dart';
 
 import '../../core/ui/colors.dart';
@@ -10,12 +13,19 @@ import '../../core/ui/kit/image.dart';
 import '../../core/ui/text_styles.dart';
 
 class AssetCard extends StatelessWidget {
-  const AssetCard({super.key});
+  final AssetEntity asset;
+
+  const AssetCard({
+    super.key,
+    required this.asset,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BouncingGestureDetector(
-      onTap: () {},
+      onTap: () async {
+        context.router.push(AssetRoute(asset: asset));
+      },
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
@@ -38,9 +48,7 @@ class AssetCard extends StatelessWidget {
                       height: constraints.maxHeight * (5 / 10),
                       width: constraints.maxWidth,
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-                      image: const NetworkImage(
-                        'https://picsum.photos/200/300',
-                      ),
+                      image: NetworkImage(asset.coverUrl),
                     ),
                     Container(
                       height: 54,
@@ -64,8 +72,9 @@ class AssetCard extends StatelessWidget {
                             ethereumIcon,
                             color: currentColorScheme(context).onBackground,
                           ),
+                          const SizedBox(width: 8),
                           Text(
-                            '0.444',
+                            asset.price.toString(),
                             style: larger.copyWith(
                               color: currentColorScheme(context).onBackground,
                               fontWeight: FontWeight.w600,
@@ -87,7 +96,7 @@ class AssetCard extends StatelessWidget {
                       children: [
                         const SizedBox(height: 8),
                         Text(
-                          'Hello hello hello hellow  hell',
+                          asset.title,
                           style: medium.copyWith(
                             color: currentColorScheme(context).onBackground,
                             fontWeight: FontWeight.w600,
@@ -100,8 +109,8 @@ class AssetCard extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const RatingStars(
-                              rating: 3.3,
+                            RatingStars(
+                              rating: asset.rating ?? 0.0,
                               itemSize: 16,
                             ),
                             AppButton(
