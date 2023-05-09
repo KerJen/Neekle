@@ -88,16 +88,17 @@ class _AssetScreenState extends State<AssetScreen> {
                         ),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: DotSlider(
-                          currentIndex: _currentImageIndex,
-                          count: allImageUrls.length,
+                    if (allImageUrls.length > 1)
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: DotSlider(
+                            currentIndex: _currentImageIndex,
+                            count: allImageUrls.length,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),

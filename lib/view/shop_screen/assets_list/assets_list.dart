@@ -10,7 +10,7 @@ import '../../../domain/assets/entity/asset_entity.dart';
 import '../../common/asset_card.dart';
 import 'cubit/cubit.dart';
 
-const int assetsListpageSize = 10;
+const int assetsPageSize = 10;
 
 class AssetsList extends StatefulWidget {
   final String? category;
@@ -33,8 +33,12 @@ class _AssetsListState extends State<AssetsList> {
     super.initState();
 
     _pagingController.addPageRequestListener((pageKey) async {
+      final lastAssetId = _pagingController.itemList?.last.id;
+
       if (widget.category != null) {
-        _cubit.getAssets(widget.category!, _pagingController.itemList?.last.id);
+        _cubit.getCategoryAssets(widget.category!, lastAssetId);
+      } else {
+        _cubit.getFavoriteAssets(lastAssetId);
       }
     });
   }
@@ -47,7 +51,7 @@ class _AssetsListState extends State<AssetsList> {
         listener: (context, state) {
           state.mapOrNull(
             assets: (value) {
-              final isLastPage = value.assets.length < assetsListpageSize;
+              final isLastPage = value.assets.length < assetsPageSize;
               if (isLastPage) {
                 _pagingController.appendLastPage(value.assets);
               } else {

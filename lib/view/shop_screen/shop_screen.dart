@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/di/di.dart';
 import '../../core/ui/colors.dart';
 import '../../core/ui/const.dart';
+import '../../core/ui/kit/loading_indicator.dart';
 import '../../core/ui/text_styles.dart';
 import 'assets_list/assets_list.dart';
+import 'cubit/cubit.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -12,54 +16,73 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> with TickerProviderStateMixin {
-  late final _tabController = TabController(length: shopCategories.length + 1, vsync: this);
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const _SearchAppBar(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 8),
-          AnimatedBuilder(
-            animation: _tabController,
-            builder: (context, _) {
-              return TabBar(
-                controller: _tabController,
-                isScrollable: true,
-                dividerColor: Colors.transparent,
-                labelStyle: medium,
-                unselectedLabelColor: currentColorScheme(context).surface,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                labelPadding: const EdgeInsets.only(right: 12),
-                tabs: [
-                  _FavoriteTab(enabled: _tabController.index == 0),
-                  for (int i = 0; i < shopCategories.length; i++)
-                    _AssetsCategory(
-                      enabled: _tabController.index - 1 == i,
-                      title: shopCategories[i],
-                    )
-                ],
-              );
-            },
-          ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                const AssetsList(),
-                for (final category in shopCategories) AssetsList(category: category),
-              ],
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        shape: const CircleBorder(),
-        child: const Icon(Icons.shopping_cart_outlined),
+    return BlocProvider(
+      create: (context) => getIt.get<ShopCubit>(),
+      child: Scaffold(
+        appBar: const _SearchAppBar(),
+        body: BlocBuilder<ShopCubit, ShopState>(
+          builder: (context, state) {
+            return state.maybeMap(
+              shop: (value) {
+                final tabController = TabController(
+                  length: shopCategories.length + (value.isAuthorized ? 1 : 0),
+                  vsync: this,
+                );
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8),
+                    AnimatedBuilder(
+                      animation: tabController,
+                      builder: (context, _) {
+                        return TabBar(
+                          controller: tabController,
+                          isScrollable: true,
+                          dividerColor: Colors.transparent,
+                          labelStyle: medium,
+                          unselectedLabelColor: currentColorScheme(context).surface,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          labelPadding: const EdgeInsets.only(right: 12),
+                          tabs: [
+                            if (value.isAuthorized) _FavoriteTab(enabled: tabController.index == 0),
+                            for (int i = 0; i < shopCategories.length; i++)
+                              _AssetsCategory(
+                                enabled: tabController.index - (value.isAuthorized ? 1 : 0) == i,
+                                title: shopCategories[i],
+                              )
+                          ],
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: TabBarView(
+                        controller: tabController,
+                        children: [
+                          if (value.isAuthorized) const AssetsList(),
+                          for (final category in shopCategories)
+                            AssetsList(
+                              key: ValueKey(category),
+                              category: category,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
+              orElse: () => const LoadingIndicator(),
+            );
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          shape: const CircleBorder(),
+          child: const Icon(Icons.shopping_cart_outlined),
+        ),
       ),
     );
   }

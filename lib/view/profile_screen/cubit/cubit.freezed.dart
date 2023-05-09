@@ -19,7 +19,6 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String data) qr,
     required TResult Function(ProfileEntity? profile) profile,
     required TResult Function(String message) failure,
   }) =>
@@ -27,7 +26,6 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(String data)? qr,
     TResult? Function(ProfileEntity? profile)? profile,
     TResult? Function(String message)? failure,
   }) =>
@@ -35,7 +33,6 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(String data)? qr,
     TResult Function(ProfileEntity? profile)? profile,
     TResult Function(String message)? failure,
     required TResult orElse(),
@@ -44,7 +41,6 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_ProfileLoadingState value) loading,
-    required TResult Function(_ProfileQrState value) qr,
     required TResult Function(_ProfileState value) profile,
     required TResult Function(_ProfileFailureState value) failure,
   }) =>
@@ -52,7 +48,6 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_ProfileLoadingState value)? loading,
-    TResult? Function(_ProfileQrState value)? qr,
     TResult? Function(_ProfileState value)? profile,
     TResult? Function(_ProfileFailureState value)? failure,
   }) =>
@@ -60,7 +55,6 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_ProfileLoadingState value)? loading,
-    TResult Function(_ProfileQrState value)? qr,
     TResult Function(_ProfileState value)? profile,
     TResult Function(_ProfileFailureState value)? failure,
     required TResult orElse(),
@@ -125,7 +119,6 @@ class _$_ProfileLoadingState implements _ProfileLoadingState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String data) qr,
     required TResult Function(ProfileEntity? profile) profile,
     required TResult Function(String message) failure,
   }) {
@@ -136,7 +129,6 @@ class _$_ProfileLoadingState implements _ProfileLoadingState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(String data)? qr,
     TResult? Function(ProfileEntity? profile)? profile,
     TResult? Function(String message)? failure,
   }) {
@@ -147,7 +139,6 @@ class _$_ProfileLoadingState implements _ProfileLoadingState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(String data)? qr,
     TResult Function(ProfileEntity? profile)? profile,
     TResult Function(String message)? failure,
     required TResult orElse(),
@@ -162,7 +153,6 @@ class _$_ProfileLoadingState implements _ProfileLoadingState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_ProfileLoadingState value) loading,
-    required TResult Function(_ProfileQrState value) qr,
     required TResult Function(_ProfileState value) profile,
     required TResult Function(_ProfileFailureState value) failure,
   }) {
@@ -173,7 +163,6 @@ class _$_ProfileLoadingState implements _ProfileLoadingState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_ProfileLoadingState value)? loading,
-    TResult? Function(_ProfileQrState value)? qr,
     TResult? Function(_ProfileState value)? profile,
     TResult? Function(_ProfileFailureState value)? failure,
   }) {
@@ -184,7 +173,6 @@ class _$_ProfileLoadingState implements _ProfileLoadingState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_ProfileLoadingState value)? loading,
-    TResult Function(_ProfileQrState value)? qr,
     TResult Function(_ProfileState value)? profile,
     TResult Function(_ProfileFailureState value)? failure,
     required TResult orElse(),
@@ -198,152 +186,6 @@ class _$_ProfileLoadingState implements _ProfileLoadingState {
 
 abstract class _ProfileLoadingState implements ProfileState {
   const factory _ProfileLoadingState() = _$_ProfileLoadingState;
-}
-
-/// @nodoc
-abstract class _$$_ProfileQrStateCopyWith<$Res> {
-  factory _$$_ProfileQrStateCopyWith(
-          _$_ProfileQrState value, $Res Function(_$_ProfileQrState) then) =
-      __$$_ProfileQrStateCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String data});
-}
-
-/// @nodoc
-class __$$_ProfileQrStateCopyWithImpl<$Res>
-    extends _$ProfileStateCopyWithImpl<$Res, _$_ProfileQrState>
-    implements _$$_ProfileQrStateCopyWith<$Res> {
-  __$$_ProfileQrStateCopyWithImpl(
-      _$_ProfileQrState _value, $Res Function(_$_ProfileQrState) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? data = null,
-  }) {
-    return _then(_$_ProfileQrState(
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$_ProfileQrState implements _ProfileQrState {
-  const _$_ProfileQrState({required this.data});
-
-  @override
-  final String data;
-
-  @override
-  String toString() {
-    return 'ProfileState.qr(data: $data)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_ProfileQrState &&
-            (identical(other.data, data) || other.data == data));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, data);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$_ProfileQrStateCopyWith<_$_ProfileQrState> get copyWith =>
-      __$$_ProfileQrStateCopyWithImpl<_$_ProfileQrState>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(String data) qr,
-    required TResult Function(ProfileEntity? profile) profile,
-    required TResult Function(String message) failure,
-  }) {
-    return qr(data);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function(String data)? qr,
-    TResult? Function(ProfileEntity? profile)? profile,
-    TResult? Function(String message)? failure,
-  }) {
-    return qr?.call(data);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(String data)? qr,
-    TResult Function(ProfileEntity? profile)? profile,
-    TResult Function(String message)? failure,
-    required TResult orElse(),
-  }) {
-    if (qr != null) {
-      return qr(data);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_ProfileLoadingState value) loading,
-    required TResult Function(_ProfileQrState value) qr,
-    required TResult Function(_ProfileState value) profile,
-    required TResult Function(_ProfileFailureState value) failure,
-  }) {
-    return qr(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_ProfileLoadingState value)? loading,
-    TResult? Function(_ProfileQrState value)? qr,
-    TResult? Function(_ProfileState value)? profile,
-    TResult? Function(_ProfileFailureState value)? failure,
-  }) {
-    return qr?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_ProfileLoadingState value)? loading,
-    TResult Function(_ProfileQrState value)? qr,
-    TResult Function(_ProfileState value)? profile,
-    TResult Function(_ProfileFailureState value)? failure,
-    required TResult orElse(),
-  }) {
-    if (qr != null) {
-      return qr(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _ProfileQrState implements ProfileState {
-  const factory _ProfileQrState({required final String data}) =
-      _$_ProfileQrState;
-
-  String get data;
-  @JsonKey(ignore: true)
-  _$$_ProfileQrStateCopyWith<_$_ProfileQrState> get copyWith =>
-      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -425,7 +267,6 @@ class _$_ProfileState implements _ProfileState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String data) qr,
     required TResult Function(ProfileEntity? profile) profile,
     required TResult Function(String message) failure,
   }) {
@@ -436,7 +277,6 @@ class _$_ProfileState implements _ProfileState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(String data)? qr,
     TResult? Function(ProfileEntity? profile)? profile,
     TResult? Function(String message)? failure,
   }) {
@@ -447,7 +287,6 @@ class _$_ProfileState implements _ProfileState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(String data)? qr,
     TResult Function(ProfileEntity? profile)? profile,
     TResult Function(String message)? failure,
     required TResult orElse(),
@@ -462,7 +301,6 @@ class _$_ProfileState implements _ProfileState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_ProfileLoadingState value) loading,
-    required TResult Function(_ProfileQrState value) qr,
     required TResult Function(_ProfileState value) profile,
     required TResult Function(_ProfileFailureState value) failure,
   }) {
@@ -473,7 +311,6 @@ class _$_ProfileState implements _ProfileState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_ProfileLoadingState value)? loading,
-    TResult? Function(_ProfileQrState value)? qr,
     TResult? Function(_ProfileState value)? profile,
     TResult? Function(_ProfileFailureState value)? failure,
   }) {
@@ -484,7 +321,6 @@ class _$_ProfileState implements _ProfileState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_ProfileLoadingState value)? loading,
-    TResult Function(_ProfileQrState value)? qr,
     TResult Function(_ProfileState value)? profile,
     TResult Function(_ProfileFailureState value)? failure,
     required TResult orElse(),
@@ -572,7 +408,6 @@ class _$_ProfileFailureState implements _ProfileFailureState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(String data) qr,
     required TResult Function(ProfileEntity? profile) profile,
     required TResult Function(String message) failure,
   }) {
@@ -583,7 +418,6 @@ class _$_ProfileFailureState implements _ProfileFailureState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(String data)? qr,
     TResult? Function(ProfileEntity? profile)? profile,
     TResult? Function(String message)? failure,
   }) {
@@ -594,7 +428,6 @@ class _$_ProfileFailureState implements _ProfileFailureState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(String data)? qr,
     TResult Function(ProfileEntity? profile)? profile,
     TResult Function(String message)? failure,
     required TResult orElse(),
@@ -609,7 +442,6 @@ class _$_ProfileFailureState implements _ProfileFailureState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_ProfileLoadingState value) loading,
-    required TResult Function(_ProfileQrState value) qr,
     required TResult Function(_ProfileState value) profile,
     required TResult Function(_ProfileFailureState value) failure,
   }) {
@@ -620,7 +452,6 @@ class _$_ProfileFailureState implements _ProfileFailureState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_ProfileLoadingState value)? loading,
-    TResult? Function(_ProfileQrState value)? qr,
     TResult? Function(_ProfileState value)? profile,
     TResult? Function(_ProfileFailureState value)? failure,
   }) {
@@ -631,7 +462,6 @@ class _$_ProfileFailureState implements _ProfileFailureState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_ProfileLoadingState value)? loading,
-    TResult Function(_ProfileQrState value)? qr,
     TResult Function(_ProfileState value)? profile,
     TResult Function(_ProfileFailureState value)? failure,
     required TResult orElse(),

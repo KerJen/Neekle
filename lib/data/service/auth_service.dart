@@ -58,7 +58,6 @@ class AuthServiceImpl extends AuthService {
       chainId: 1,
       onDisplayUri: (uri) => completer.complete(uri),
     );
-
     return completer.future;
   }
 
@@ -91,7 +90,7 @@ class AuthServiceImpl extends AuthService {
     if (token == null) {
       throw UnauthorizedException();
     }
-
+    
     return await auth.signInWithCustomToken(token);
   }
 

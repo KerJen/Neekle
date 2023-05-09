@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:walletconnect_dart/walletconnect_dart.dart';
 import 'package:web3dart/web3dart.dart';
@@ -20,8 +21,14 @@ abstract class Web3Module {
 
   @lazySingleton
   Web3Client get web3client => Web3Client(
-        testRpcUrl,
+        iphoneRpcUrl,
         http.Client(),
-        socketConnector: () => IOWebSocketChannel.connect(testWsRpcUrl).cast<String>(),
+        socketConnector: () => IOWebSocketChannel.connect(iphoneRpcUrl.replaceFirst('http', 'ws')).cast<String>(),
+      );
+
+  @preResolve
+  Future<DeployedContract> get contract async => DeployedContract(
+        ContractAbi.fromJson(await rootBundle.loadString('assets/strings/abi.json'), 'DigitalAssetsMarketplace'),
+        EthereumAddress.fromHex('0xb9fCDd9B12447f850984DC7DEC6914Bd7a495e5b'),
       );
 }

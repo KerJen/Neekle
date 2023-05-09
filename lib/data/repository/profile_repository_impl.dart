@@ -7,6 +7,7 @@ import 'package:rxdart/rxdart.dart';
 import '../../core/error/failure.dart';
 import '../../domain/profile/entity/profile_entity.dart';
 import '../../domain/profile/repository/profile_repository.dart';
+import '../converter/asset_entity_converter.dart';
 import '../service/assets_service.dart';
 import '../service/auth_service.dart';
 import '../service/statistics_service.dart';
@@ -17,7 +18,14 @@ class ProfileRepositoryImpl extends ProfileRepository {
   final AssetsService assetsService;
   final StatisticsService statisticsService;
 
-  ProfileRepositoryImpl({required this.authService, required this.assetsService, required this.statisticsService}) {
+  final AssetEntityConverter assetEntityConverter;
+
+  ProfileRepositoryImpl({
+    required this.authService,
+    required this.assetsService,
+    required this.statisticsService,
+    required this.assetEntityConverter,
+  }) {
     authService.walletSessionStatus().listen((session) async {
       final signature = await authService.signSignInMessage(session.accounts.first);
 
@@ -32,20 +40,22 @@ class ProfileRepositoryImpl extends ProfileRepository {
   @override
   Stream<ProfileEntity?> currentProfile() {
     final authStream = authService.authStateChanges();
-    // final showcaseStream = assetsService.getAssets(category, lastAssetId: lastAssetId, limit: limit)
 
     return authStream.flatMap((user) {
       if (user == null) {
         return Stream.value(null);
       }
 
-      // ignore: discarded_futures
-      return Stream.fromFuture(statisticsService.getBalance(user.uid)).map(
-        (balance) => ProfileEntity(
-          address: user.uid,
-          balance: balance,
-          showcase: const [],
-        ),
+      return Rx.combineLatest2(
+        Stream.fromFuture(statisticsService.getBalance(user.uid)),
+        assetsService.showcase(user.uid),
+        (balance, showcase) {
+          return ProfileEntity(
+            address: user.uid,
+            balance: balance,
+            showcase: showcase.map((model) => assetEntityConverter.convert(model)).toList(growable: false),
+          );
+        },
       );
     });
   }

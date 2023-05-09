@@ -8,8 +8,8 @@ import '../../core/ui/const.dart';
 import '../../core/ui/kit/bouncing_gesture_detector.dart';
 import '../../core/ui/kit/loading_indicator.dart';
 import '../../core/ui/text_styles.dart';
+import '../qr_sheet/qr_sheet.dart';
 import 'cubit/cubit.dart';
-import 'qr_sheet.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -19,20 +19,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  double? balance;
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt.get<ProfileCubit>(),
-      child: BlocConsumer<ProfileCubit, ProfileState>(
-        listener: (context, state) async {
-          state.mapOrNull(
-            qr: (value) async {
-              QrSheet.show(context, data: value.data, cubit: context.read<ProfileCubit>());
-            },
-          );
-        },
+      child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -72,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           },
                         ) ??
                         _ConnectWallet(
-                          onConnect: () => context.read<ProfileCubit>().createQR(),
+                          onConnect: () async => QrSheet.show(context),
                         ),
                   ),
                 ],

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../core/di/di.dart';
 import '../../core/ui/colors.dart';
 import '../../core/ui/kit/bouncing_gesture_detector.dart';
+import '../../core/ui/kit/button.dart';
 import '../../core/ui/kit/loading_indicator.dart';
 import '../../core/ui/text_styles.dart';
-import '../../domain/assets/entity/asset_entity.dart';
 import '../common/asset_card.dart';
+import '../qr_sheet/qr_sheet.dart';
 import 'cubit/cubit.dart';
 
 class StudioScreen extends StatefulWidget {
@@ -21,6 +21,12 @@ class StudioScreen extends StatefulWidget {
 
 class _StudioScreenState extends State<StudioScreen> {
   final StudioCubit _cubit = getIt.get();
+
+  @override
+  Future<void> dispose() async {
+    await _cubit.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +44,37 @@ class _StudioScreenState extends State<StudioScreen> {
                 builder: (context, state) {
                   return state.maybeMap(
                     needLogIn: (value) {
-                      return SliverToBoxAdapter(
-                        child: Text('ffff'),
+                      return SliverFillRemaining(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'You need to connect your wallet to see your studio',
+                              style: larger.copyWith(),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 16),
+                            AppButton(
+                              height: 36,
+                              borderRadius: BorderRadius.circular(18),
+                              onTap: () async {
+                                QrSheet.show(context);
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                                    child: Text(
+                                      'Connect',
+                                      style: medium.copyWith(color: currentColorScheme(context).onSecondaryContainer),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     },
                     studio: (value) {
@@ -89,17 +124,20 @@ class _StudioScreenState extends State<StudioScreen> {
                               ),
                             )
                           else
-                            SliverGrid(
-                              delegate: SliverChildBuilderDelegate(
-                                childCount: value.showcase.length,
-                                (context, index) {
-                                  return AssetCard(asset: value.showcase[index]);
-                                },
-                              ),
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 16,
-                                crossAxisSpacing: 16,
+                            SliverPadding(
+                              padding: const EdgeInsets.only(top: 16),
+                              sliver: SliverGrid(
+                                delegate: SliverChildBuilderDelegate(
+                                  childCount: value.showcase.length,
+                                  (context, index) {
+                                    return AssetCard(asset: value.showcase[index]);
+                                  },
+                                ),
+                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 16,
+                                  crossAxisSpacing: 16,
+                                ),
                               ),
                             ),
                         ],
