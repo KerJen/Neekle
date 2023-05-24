@@ -53,9 +53,9 @@ class _QrSheetState extends State<QrSheet> {
                 const SizedBox(height: 16),
                 state.maybeMap(
                   qr: (value) {
-                    return QrImage(
+                    return QrImageView(
                       data: value.data,
-                      foregroundColor: currentColorScheme(context).onBackground,
+                      // eyeStyle: currentColorScheme(context).onBackground,
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                     );
                   },
