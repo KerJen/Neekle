@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:isar/isar.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
@@ -12,10 +13,18 @@ import 'core/di/di.dart';
 import 'core/ui/const.dart';
 import 'core/ui/router/router.dart';
 import 'core/ui/text_styles.dart';
+import 'data/model/asset/asset_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
+
+  final isar = getIt.get<Isar>();
+
+  // await isar.txn(() async {
+  //   print((await isar.shopcart.where().findAll()).length);
+  // });
+
   runApp(MainApp());
 }
 

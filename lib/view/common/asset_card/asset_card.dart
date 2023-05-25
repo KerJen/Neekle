@@ -1,23 +1,27 @@
+import 'dart:ffi';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../core/ui/const.dart';
-import '../../core/ui/kit/bouncing_gesture_detector.dart';
-import '../../core/ui/router/router.dart';
-import '../../domain/assets/entity/asset_entity.dart';
-import 'rating_stars.dart';
+import '../../../core/ui/const.dart';
+import '../../../core/ui/kit/bouncing_gesture_detector.dart';
+import '../../../core/ui/router/router.dart';
+import '../../../domain/assets/entity/asset_entity.dart';
+import '../rating_stars.dart';
 
-import '../../core/ui/colors.dart';
-import '../../core/ui/kit/button.dart';
-import '../../core/ui/kit/image.dart';
-import '../../core/ui/text_styles.dart';
+import '../../../core/ui/colors.dart';
+import '../../../core/ui/kit/button.dart';
+import '../../../core/ui/kit/image.dart';
+import '../../../core/ui/text_styles.dart';
 
 class AssetCard extends StatelessWidget {
   final AssetEntity asset;
+  final VoidCallback? onAddToShopcart;
 
   const AssetCard({
     super.key,
     required this.asset,
+    this.onAddToShopcart,
   });
 
   @override
@@ -106,25 +110,29 @@ class AssetCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         const Spacer(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RatingStars(
-                              rating: asset.rating ?? 0.0,
-                              itemSize: 16,
-                            ),
-                            AppButton(
-                              height: 28,
-                              width: 52,
-                              borderRadius: BorderRadius.circular(14),
-                              onTap: () {},
-                              child: Icon(
-                                Icons.shopping_cart_outlined,
-                                size: 18,
-                                color: currentColorScheme(context).primary,
+                        SizedBox(
+                          height: 28,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              RatingStars(
+                                rating: asset.rating ?? 0.0,
+                                itemSize: 16,
                               ),
-                            ),
-                          ],
+                              if (onAddToShopcart != null)
+                                AppButton(
+                                  height: 28,
+                                  width: 52,
+                                  borderRadius: BorderRadius.circular(14),
+                                  onTap: onAddToShopcart,
+                                  child: Icon(
+                                    Icons.shopping_cart_outlined,
+                                    size: 18,
+                                    color: currentColorScheme(context).primary,
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
                         const SizedBox(height: 8),
                       ],

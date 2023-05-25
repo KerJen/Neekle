@@ -24,11 +24,15 @@ dependencies:
   injectable: ^2.1.1
 
   # Route
-  auto_route: ^6.4.0
+  auto_route: ^7.2.0
 
   # Web3
   web3dart: ^2.6.1
   walletconnect_dart: ^0.0.11
+
+  # DB
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
 
   # Extensions
   rxdart: ^0.27.7
@@ -39,12 +43,13 @@ dependencies:
   json_annotation: ^4.8.0
   flutter_svg: ^2.0.5
   qr_flutter: ^4.0.0
-  extended_image: ^7.0.2
+  extended_image: ^8.0.1
   flutter_rating_bar: ^4.0.1
   flutter_tags: 1.0.0-nullsafety.1
   infinite_scroll_pagination: ^3.2.0
   sliver_tools: ^0.2.10
   web_socket_channel: ^2.4.0
+  path_provider: ^2.0.15
 
 dev_dependencies:
   flutter_test:
@@ -52,9 +57,10 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.3.3
   injectable_generator: ^2.1.5
-  auto_route_generator: ^6.2.0
+  auto_route_generator: ^7.1.1
   freezed: ^2.3.2
   json_serializable: ^6.6.1
+  isar_generator: 3.1.0+1
 
 flutter:
   uses-material-design: true

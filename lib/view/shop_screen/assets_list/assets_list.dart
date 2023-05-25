@@ -7,7 +7,7 @@ import '../../../core/ui/colors.dart';
 import '../../../core/ui/kit/loading_indicator.dart';
 import '../../../core/ui/text_styles.dart';
 import '../../../domain/assets/entity/asset_entity.dart';
-import '../../common/asset_card.dart';
+import '../../common/asset_card/asset_card.dart';
 import 'cubit/cubit.dart';
 
 const int assetsPageSize = 10;
@@ -91,6 +91,9 @@ class _AssetsListState extends State<AssetsList> {
               itemBuilder: (context, item, index) {
                 return AssetCard(
                   asset: item,
+                  onAddToShopcart: () {
+                    _cubit.addToShopcart(item);
+                  },
                 );
               },
               animateTransitions: true,

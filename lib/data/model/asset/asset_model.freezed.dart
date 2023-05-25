@@ -228,7 +228,7 @@ class __$$_AssetModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_AssetModel implements _AssetModel {
+class _$_AssetModel extends _AssetModel {
   const _$_AssetModel(
       {required this.id,
       required this.coverUrl,
@@ -242,7 +242,8 @@ class _$_AssetModel implements _AssetModel {
       required this.size,
       required this.ext})
       : _imageUrls = imageUrls,
-        _tags = tags;
+        _tags = tags,
+        super._();
 
   factory _$_AssetModel.fromJson(Map<String, dynamic> json) =>
       _$$_AssetModelFromJson(json);
@@ -339,7 +340,7 @@ class _$_AssetModel implements _AssetModel {
   }
 }
 
-abstract class _AssetModel implements AssetModel {
+abstract class _AssetModel extends AssetModel {
   const factory _AssetModel(
       {required final String id,
       required final String coverUrl,
@@ -352,6 +353,7 @@ abstract class _AssetModel implements AssetModel {
       required final double? rating,
       required final double size,
       required final String ext}) = _$_AssetModel;
+  const _AssetModel._() : super._();
 
   factory _AssetModel.fromJson(Map<String, dynamic> json) =
       _$_AssetModel.fromJson;

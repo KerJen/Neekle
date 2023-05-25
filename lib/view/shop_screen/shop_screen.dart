@@ -7,6 +7,7 @@ import '../../core/ui/kit/loading_indicator.dart';
 import '../../core/ui/text_styles.dart';
 import 'assets_list/assets_list.dart';
 import 'cubit/cubit.dart';
+import 'shopcart_sheet/shopcart_sheet.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -79,7 +80,9 @@ class _ShopScreenState extends State<ShopScreen> with TickerProviderStateMixin {
           },
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            ShopcartSheet.show(context);
+          },
           shape: const CircleBorder(),
           child: const Icon(Icons.shopping_cart_outlined),
         ),
