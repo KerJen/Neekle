@@ -55,7 +55,14 @@ class _QrSheetState extends State<QrSheet> {
                   qr: (value) {
                     return QrImageView(
                       data: value.data,
-                      // eyeStyle: currentColorScheme(context).onBackground,
+                      eyeStyle: QrEyeStyle(
+                        color: currentColorScheme(context).onBackground,
+                        eyeShape: QrEyeShape.square,
+                      ),
+                      dataModuleStyle: QrDataModuleStyle(
+                        color: currentColorScheme(context).onBackground,
+                        dataModuleShape: QrDataModuleShape.square,
+                      ),
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                     );
                   },

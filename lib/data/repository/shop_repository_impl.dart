@@ -39,7 +39,9 @@ class ShopRepositoryImpl extends ShopRepository {
   }
 
   @override
-  Future<void> removeAssetFromShopcart(Id isarId) async {
-    await isar.shopcart.delete(isarId);
+  Future<void> removeAssetFromShopcart(String assetId) async {
+    await isar.writeTxn(() async {
+      await isar.shopcart.filter().idEqualTo(assetId).deleteFirst();
+    });
   }
 }

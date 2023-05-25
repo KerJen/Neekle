@@ -16,12 +16,14 @@ import '../../../core/ui/text_styles.dart';
 
 class AssetCard extends StatelessWidget {
   final AssetEntity asset;
-  final VoidCallback? onAddToShopcart;
+  final bool inShopcart;
+  final Function(bool inShopcart)? onShopcartStateChanged;
 
   const AssetCard({
     super.key,
     required this.asset,
-    this.onAddToShopcart,
+    this.inShopcart = false,
+    this.onShopcartStateChanged,
   });
 
   @override
@@ -119,16 +121,24 @@ class AssetCard extends StatelessWidget {
                                 rating: asset.rating ?? 0.0,
                                 itemSize: 16,
                               ),
-                              if (onAddToShopcart != null)
+                              if (onShopcartStateChanged != null)
                                 AppButton(
                                   height: 28,
                                   width: 52,
+                                  color: inShopcart
+                                      ? currentColorScheme(context).surface
+                                      : currentColorScheme(context).secondaryContainer,
                                   borderRadius: BorderRadius.circular(14),
-                                  onTap: onAddToShopcart,
+                                  onTap: () {
+                                    onShopcartStateChanged!(!inShopcart);
+                                  },
                                   child: Icon(
-                                    Icons.shopping_cart_outlined,
+                                    key: ValueKey(inShopcart),
+                                    inShopcart ? Icons.remove_shopping_cart_outlined : Icons.shopping_cart_outlined,
                                     size: 18,
-                                    color: currentColorScheme(context).primary,
+                                    color: inShopcart
+                                        ? currentColorScheme(context).onSurface
+                                        : currentColorScheme(context).primary,
                                   ),
                                 ),
                             ],

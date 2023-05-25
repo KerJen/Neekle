@@ -35,10 +35,10 @@ import 'package:neekle/view/profile_screen/cubit/cubit.dart' as _i27;
 import 'package:neekle/view/qr_sheet/cubit/cubit.dart' as _i22;
 import 'package:neekle/view/shop_screen/assets_list/cubit/cubit.dart' as _i26;
 import 'package:neekle/view/shop_screen/cubit/cubit.dart' as _i23;
+import 'package:neekle/view/shop_screen/shopcart_sheet/buy_button/cubit/cubit.dart'
+    as _i24;
 import 'package:neekle/view/shop_screen/shopcart_sheet/cubit/cubit.dart'
     as _i13;
-import 'package:neekle/view/shop_screen/shopcart_sheet/widgets/cubit/cubit.dart'
-    as _i24;
 import 'package:neekle/view/studio_screen/cubit/cubit.dart' as _i25;
 import 'package:walletconnect_dart/walletconnect_dart.dart' as _i14;
 import 'package:web3dart/web3dart.dart' as _i5;
@@ -114,7 +114,12 @@ extension GetItInjectableX on _i1.GetIt {
         profileRepository: gh<_i20.ProfileRepository>()));
     gh.factory<_i25.StudioCubit>(() =>
         _i25.StudioCubit(profileRepository: gh<_i20.ProfileRepository>()));
-    gh.factory<_i26.AssetsListCubit>(() => _i26.AssetsListCubit(
+    gh.factoryParam<_i26.AssetsListCubit, String?, dynamic>((
+      category,
+      _,
+    ) =>
+        _i26.AssetsListCubit(
+          category: category,
           assetsRepository: gh<_i18.AssetsRepository>(),
           shopRepository: gh<_i11.ShopRepository>(),
         ));

@@ -19,21 +19,25 @@ mixin _$AssetsListState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<AssetEntity> assets) assets,
+    required TResult Function(
+            List<({AssetEntity asset, bool inShopcart})> assets)
+        assets,
     required TResult Function(String message) failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<AssetEntity> assets)? assets,
+    TResult? Function(List<({AssetEntity asset, bool inShopcart})> assets)?
+        assets,
     TResult? Function(String message)? failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<AssetEntity> assets)? assets,
+    TResult Function(List<({AssetEntity asset, bool inShopcart})> assets)?
+        assets,
     TResult Function(String message)? failure,
     required TResult orElse(),
   }) =>
@@ -120,7 +124,9 @@ class _$_AssetsListLoadingState implements _AssetsListLoadingState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<AssetEntity> assets) assets,
+    required TResult Function(
+            List<({AssetEntity asset, bool inShopcart})> assets)
+        assets,
     required TResult Function(String message) failure,
   }) {
     return loading();
@@ -130,7 +136,8 @@ class _$_AssetsListLoadingState implements _AssetsListLoadingState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<AssetEntity> assets)? assets,
+    TResult? Function(List<({AssetEntity asset, bool inShopcart})> assets)?
+        assets,
     TResult? Function(String message)? failure,
   }) {
     return loading?.call();
@@ -140,7 +147,8 @@ class _$_AssetsListLoadingState implements _AssetsListLoadingState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<AssetEntity> assets)? assets,
+    TResult Function(List<({AssetEntity asset, bool inShopcart})> assets)?
+        assets,
     TResult Function(String message)? failure,
     required TResult orElse(),
   }) {
@@ -195,7 +203,7 @@ abstract class _$$_AssetsListStateCopyWith<$Res> {
           _$_AssetsListState value, $Res Function(_$_AssetsListState) then) =
       __$$_AssetsListStateCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<AssetEntity> assets});
+  $Res call({List<({AssetEntity asset, bool inShopcart})> assets});
 }
 
 /// @nodoc
@@ -215,7 +223,7 @@ class __$$_AssetsListStateCopyWithImpl<$Res>
       assets: null == assets
           ? _value._assets
           : assets // ignore: cast_nullable_to_non_nullable
-              as List<AssetEntity>,
+              as List<({AssetEntity asset, bool inShopcart})>,
     ));
   }
 }
@@ -223,12 +231,13 @@ class __$$_AssetsListStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AssetsListState implements _AssetsListState {
-  const _$_AssetsListState({required final List<AssetEntity> assets})
+  const _$_AssetsListState(
+      {required final List<({AssetEntity asset, bool inShopcart})> assets})
       : _assets = assets;
 
-  final List<AssetEntity> _assets;
+  final List<({AssetEntity asset, bool inShopcart})> _assets;
   @override
-  List<AssetEntity> get assets {
+  List<({AssetEntity asset, bool inShopcart})> get assets {
     if (_assets is EqualUnmodifiableListView) return _assets;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_assets);
@@ -261,7 +270,9 @@ class _$_AssetsListState implements _AssetsListState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<AssetEntity> assets) assets,
+    required TResult Function(
+            List<({AssetEntity asset, bool inShopcart})> assets)
+        assets,
     required TResult Function(String message) failure,
   }) {
     return assets(this.assets);
@@ -271,7 +282,8 @@ class _$_AssetsListState implements _AssetsListState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<AssetEntity> assets)? assets,
+    TResult? Function(List<({AssetEntity asset, bool inShopcart})> assets)?
+        assets,
     TResult? Function(String message)? failure,
   }) {
     return assets?.call(this.assets);
@@ -281,7 +293,8 @@ class _$_AssetsListState implements _AssetsListState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<AssetEntity> assets)? assets,
+    TResult Function(List<({AssetEntity asset, bool inShopcart})> assets)?
+        assets,
     TResult Function(String message)? failure,
     required TResult orElse(),
   }) {
@@ -327,10 +340,11 @@ class _$_AssetsListState implements _AssetsListState {
 }
 
 abstract class _AssetsListState implements AssetsListState {
-  const factory _AssetsListState({required final List<AssetEntity> assets}) =
-      _$_AssetsListState;
+  const factory _AssetsListState(
+      {required final List<({AssetEntity asset, bool inShopcart})>
+          assets}) = _$_AssetsListState;
 
-  List<AssetEntity> get assets;
+  List<({AssetEntity asset, bool inShopcart})> get assets;
   @JsonKey(ignore: true)
   _$$_AssetsListStateCopyWith<_$_AssetsListState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -402,7 +416,9 @@ class _$_AssetsListFailureState implements _AssetsListFailureState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<AssetEntity> assets) assets,
+    required TResult Function(
+            List<({AssetEntity asset, bool inShopcart})> assets)
+        assets,
     required TResult Function(String message) failure,
   }) {
     return failure(message);
@@ -412,7 +428,8 @@ class _$_AssetsListFailureState implements _AssetsListFailureState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<AssetEntity> assets)? assets,
+    TResult? Function(List<({AssetEntity asset, bool inShopcart})> assets)?
+        assets,
     TResult? Function(String message)? failure,
   }) {
     return failure?.call(message);
@@ -422,7 +439,8 @@ class _$_AssetsListFailureState implements _AssetsListFailureState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<AssetEntity> assets)? assets,
+    TResult Function(List<({AssetEntity asset, bool inShopcart})> assets)?
+        assets,
     TResult Function(String message)? failure,
     required TResult orElse(),
   }) {

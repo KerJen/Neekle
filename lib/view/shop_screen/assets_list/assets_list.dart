@@ -25,21 +25,17 @@ class AssetsList extends StatefulWidget {
 }
 
 class _AssetsListState extends State<AssetsList> {
-  late final AssetsListCubit _cubit = getIt.get();
-  final _pagingController = PagingController<int, AssetEntity>(firstPageKey: 0);
+  late final AssetsListCubit _cubit;
+  final _pagingController = PagingController<int, ({bool inShopcart, AssetEntity asset})>(firstPageKey: 0);
 
   @override
   void initState() {
     super.initState();
+    _cubit = getIt.get(param1: widget.category);
 
     _pagingController.addPageRequestListener((pageKey) async {
-      final lastAssetId = _pagingController.itemList?.last.id;
-
-      if (widget.category != null) {
-        _cubit.getCategoryAssets(widget.category!, lastAssetId);
-      } else {
-        _cubit.getFavoriteAssets(lastAssetId);
-      }
+      final lastAssetId = _pagingController.itemList?.last.asset.id;
+      _cubit.loadMore(lastAssetId);
     });
   }
 
@@ -51,11 +47,32 @@ class _AssetsListState extends State<AssetsList> {
         listener: (context, state) {
           state.mapOrNull(
             assets: (value) {
-              final isLastPage = value.assets.length < assetsPageSize;
+              final currentAssetIds = _pagingController.itemList?.map((e) => e.asset.id).toSet() ?? {};
+              final newAssetIds = value.assets.map((e) => e.asset.id).toSet();
+
+              final addableAssetIds = newAssetIds.difference(currentAssetIds);
+              final changableAssetIds = currentAssetIds.intersection(newAssetIds);
+
+              final addableAssets =
+                  value.assets.where((asset) => addableAssetIds.contains(asset.asset.id)).toList(growable: false);
+
+              final changableAssets =
+                  value.assets.where((asset) => changableAssetIds.contains(asset.asset.id)).toList(growable: false);
+
+              for (final asset in changableAssets) {
+                final replacementIndex =
+                    _pagingController.itemList?.indexWhere((element) => element.asset.id == asset.asset.id) ?? -1;
+
+                _pagingController.itemList?[replacementIndex] = asset;
+              }
+
+              setState(() {});
+
+              final isLastPage = addableAssets.length < assetsPageSize;
               if (isLastPage) {
-                _pagingController.appendLastPage(value.assets);
+                _pagingController.appendLastPage(addableAssets);
               } else {
-                _pagingController.appendPage(value.assets, _pagingController.nextPageKey ?? 0 + 1);
+                _pagingController.appendPage(addableAssets, _pagingController.nextPageKey ?? 0 + 1);
               }
             },
           );
@@ -65,7 +82,7 @@ class _AssetsListState extends State<AssetsList> {
           onRefresh: () async {
             _pagingController.refresh();
           },
-          child: PagedGridView<int, AssetEntity>(
+          child: PagedGridView<int, ({bool inShopcart, AssetEntity asset})>(
             pagingController: _pagingController,
             padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
             builderDelegate: PagedChildBuilderDelegate(
@@ -90,13 +107,15 @@ class _AssetsListState extends State<AssetsList> {
               ),
               itemBuilder: (context, item, index) {
                 return AssetCard(
-                  asset: item,
-                  onAddToShopcart: () {
-                    _cubit.addToShopcart(item);
+                  key: ValueKey(item.asset.id),
+                  asset: item.asset,
+                  inShopcart: item.inShopcart,
+                  onShopcartStateChanged: (isAdd) {
+                    isAdd ? _cubit.addToShopcart(item.asset) : _cubit.removeFromShopcart(item.asset.id);
                   },
                 );
               },
-              animateTransitions: true,
+              // animateTransitions: true,
             ),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,

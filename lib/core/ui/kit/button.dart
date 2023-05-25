@@ -7,7 +7,6 @@ class AppButton extends StatelessWidget {
   final double? height;
   final double? width;
   final BorderRadius? borderRadius;
-
   final Color? color;
   final Alignment? alignment;
   final Widget child;

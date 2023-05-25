@@ -20,21 +20,18 @@ mixin _$ShopcartState {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(List<AssetEntity> assets) cart,
-    required TResult Function() bought,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(List<AssetEntity> assets)? cart,
-    TResult? Function()? bought,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(List<AssetEntity> assets)? cart,
-    TResult Function()? bought,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -42,21 +39,18 @@ mixin _$ShopcartState {
   TResult map<TResult extends Object?>({
     required TResult Function(_ShopcartLoadingState value) loading,
     required TResult Function(_ShopcartState value) cart,
-    required TResult Function(_ShopcartBoughtState value) bought,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_ShopcartLoadingState value)? loading,
     TResult? Function(_ShopcartState value)? cart,
-    TResult? Function(_ShopcartBoughtState value)? bought,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_ShopcartLoadingState value)? loading,
     TResult Function(_ShopcartState value)? cart,
-    TResult Function(_ShopcartBoughtState value)? bought,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -120,7 +114,6 @@ class _$_ShopcartLoadingState implements _ShopcartLoadingState {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(List<AssetEntity> assets) cart,
-    required TResult Function() bought,
   }) {
     return loading();
   }
@@ -130,7 +123,6 @@ class _$_ShopcartLoadingState implements _ShopcartLoadingState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(List<AssetEntity> assets)? cart,
-    TResult? Function()? bought,
   }) {
     return loading?.call();
   }
@@ -140,7 +132,6 @@ class _$_ShopcartLoadingState implements _ShopcartLoadingState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(List<AssetEntity> assets)? cart,
-    TResult Function()? bought,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -154,7 +145,6 @@ class _$_ShopcartLoadingState implements _ShopcartLoadingState {
   TResult map<TResult extends Object?>({
     required TResult Function(_ShopcartLoadingState value) loading,
     required TResult Function(_ShopcartState value) cart,
-    required TResult Function(_ShopcartBoughtState value) bought,
   }) {
     return loading(this);
   }
@@ -164,7 +154,6 @@ class _$_ShopcartLoadingState implements _ShopcartLoadingState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_ShopcartLoadingState value)? loading,
     TResult? Function(_ShopcartState value)? cart,
-    TResult? Function(_ShopcartBoughtState value)? bought,
   }) {
     return loading?.call(this);
   }
@@ -174,7 +163,6 @@ class _$_ShopcartLoadingState implements _ShopcartLoadingState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_ShopcartLoadingState value)? loading,
     TResult Function(_ShopcartState value)? cart,
-    TResult Function(_ShopcartBoughtState value)? bought,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -261,7 +249,6 @@ class _$_ShopcartState implements _ShopcartState {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(List<AssetEntity> assets) cart,
-    required TResult Function() bought,
   }) {
     return cart(assets);
   }
@@ -271,7 +258,6 @@ class _$_ShopcartState implements _ShopcartState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function(List<AssetEntity> assets)? cart,
-    TResult? Function()? bought,
   }) {
     return cart?.call(assets);
   }
@@ -281,7 +267,6 @@ class _$_ShopcartState implements _ShopcartState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(List<AssetEntity> assets)? cart,
-    TResult Function()? bought,
     required TResult orElse(),
   }) {
     if (cart != null) {
@@ -295,7 +280,6 @@ class _$_ShopcartState implements _ShopcartState {
   TResult map<TResult extends Object?>({
     required TResult Function(_ShopcartLoadingState value) loading,
     required TResult Function(_ShopcartState value) cart,
-    required TResult Function(_ShopcartBoughtState value) bought,
   }) {
     return cart(this);
   }
@@ -305,7 +289,6 @@ class _$_ShopcartState implements _ShopcartState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_ShopcartLoadingState value)? loading,
     TResult? Function(_ShopcartState value)? cart,
-    TResult? Function(_ShopcartBoughtState value)? bought,
   }) {
     return cart?.call(this);
   }
@@ -315,7 +298,6 @@ class _$_ShopcartState implements _ShopcartState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_ShopcartLoadingState value)? loading,
     TResult Function(_ShopcartState value)? cart,
-    TResult Function(_ShopcartBoughtState value)? bought,
     required TResult orElse(),
   }) {
     if (cart != null) {
@@ -333,112 +315,4 @@ abstract class _ShopcartState implements ShopcartState {
   @JsonKey(ignore: true)
   _$$_ShopcartStateCopyWith<_$_ShopcartState> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$_ShopcartBoughtStateCopyWith<$Res> {
-  factory _$$_ShopcartBoughtStateCopyWith(_$_ShopcartBoughtState value,
-          $Res Function(_$_ShopcartBoughtState) then) =
-      __$$_ShopcartBoughtStateCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$_ShopcartBoughtStateCopyWithImpl<$Res>
-    extends _$ShopcartStateCopyWithImpl<$Res, _$_ShopcartBoughtState>
-    implements _$$_ShopcartBoughtStateCopyWith<$Res> {
-  __$$_ShopcartBoughtStateCopyWithImpl(_$_ShopcartBoughtState _value,
-      $Res Function(_$_ShopcartBoughtState) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$_ShopcartBoughtState implements _ShopcartBoughtState {
-  const _$_ShopcartBoughtState();
-
-  @override
-  String toString() {
-    return 'ShopcartState.bought()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_ShopcartBoughtState);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(List<AssetEntity> assets) cart,
-    required TResult Function() bought,
-  }) {
-    return bought();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function(List<AssetEntity> assets)? cart,
-    TResult? Function()? bought,
-  }) {
-    return bought?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(List<AssetEntity> assets)? cart,
-    TResult Function()? bought,
-    required TResult orElse(),
-  }) {
-    if (bought != null) {
-      return bought();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_ShopcartLoadingState value) loading,
-    required TResult Function(_ShopcartState value) cart,
-    required TResult Function(_ShopcartBoughtState value) bought,
-  }) {
-    return bought(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_ShopcartLoadingState value)? loading,
-    TResult? Function(_ShopcartState value)? cart,
-    TResult? Function(_ShopcartBoughtState value)? bought,
-  }) {
-    return bought?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_ShopcartLoadingState value)? loading,
-    TResult Function(_ShopcartState value)? cart,
-    TResult Function(_ShopcartBoughtState value)? bought,
-    required TResult orElse(),
-  }) {
-    if (bought != null) {
-      return bought(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _ShopcartBoughtState implements ShopcartState {
-  const factory _ShopcartBoughtState() = _$_ShopcartBoughtState;
 }

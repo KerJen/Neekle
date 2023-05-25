@@ -22,36 +22,31 @@ class AssetsRepositoryImpl extends AssetsRepository {
   });
 
   @override
-  Future<Either<Failure, List<AssetEntity>>> getFavoriteAssets({
-    required String? lastAssetId,
-    required int limit,
-  }) async {
-    try {
-      final address = (await authService.authStateChanges().first)?.uid;
-
-      if (address == null) {
-        return Left(UnauthorizedFailure());
-      }
-
-      final models = await assetsService.getFavoriteAssets(address: address, lastAssetId: lastAssetId, limit: limit);
-      return Right(models.map((model) => assetEntityConverter.convert(model)).toList(growable: false));
-    } catch (_) {
-      return Left(UnknownFailure());
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<AssetEntity>>> getCategoryAssets(
-    String category, {
-    required String? lastAssetId,
+  Stream<Either<Failure, List<AssetEntity>>> getCategoryAssets(
+    String? category, {
+    required Stream<String?> lastAssetIdStream,
     required int limit,
     bool force = false,
-  }) async {
-    try {
-      final models = await assetsService.getCategoryAssets(category, lastAssetId: lastAssetId, limit: limit);
-      return Right(models.map((model) => assetEntityConverter.convert(model)).toList(growable: false));
-    } catch (_) {
-      return Left(UnknownFailure());
-    }
+  }) {
+    return lastAssetIdStream.asyncMap((lastAssetId) async {
+      try {
+        if (category != null) {
+          final models = await assetsService.getCategoryAssets(category, lastAssetId: lastAssetId, limit: limit);
+          return Right(models.map((model) => assetEntityConverter.convert(model)).toList(growable: false));
+        } else {
+          final address = (await authService.authStateChanges().first)?.uid;
+
+          if (address == null) {
+            return Left(UnauthorizedFailure());
+          }
+
+          final models =
+              await assetsService.getFavoriteAssets(address: address, lastAssetId: lastAssetId, limit: limit);
+          return Right(models.map((model) => assetEntityConverter.convert(model)).toList(growable: false));
+        }
+      } catch (_) {
+        return Left(UnknownFailure());
+      }
+    });
   }
 }
