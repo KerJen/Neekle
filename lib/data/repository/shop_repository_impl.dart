@@ -21,11 +21,28 @@ class ShopRepositoryImpl extends ShopRepository {
   });
 
   @override
-  Stream<List<AssetEntity>> getShopcart() {
-    return isar.shopcart.watchLazy().startWith(null).asyncMap(
-          (event) async => await isar.txn(
-            () async {
-              return (await isar.shopcart.where().findAll()).map((e) => assetEntityConverter.convert(e)).toList();
+  Stream<List<AssetEntity>> shopcart() {
+    return isar.shopcart.watchLazy().startWith(null).map(
+          (event) => isar.txnSync(
+            () {
+              return isar.shopcart.where().findAllSync().map((e) => assetEntityConverter.convert(e)).toList();
+            },
+          ),
+        );
+  }
+
+  @override
+  Stream<AssetEntity?> shopcartAsset(String assetId) {
+    return isar.shopcart.watchLazy().startWith(null).map(
+          (event) => isar.txnSync(
+            () {
+              final model = isar.shopcart.filter().idEqualTo(assetId).findFirstSync();
+
+              if (model == null) {
+                return null;
+              }
+
+              return assetEntityConverter.convert(model);
             },
           ),
         );

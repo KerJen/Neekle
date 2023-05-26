@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../domain/assets/entity/asset_entity.dart';
 import '../../core/error/failure.dart';
@@ -20,6 +21,11 @@ class AssetsRepositoryImpl extends AssetsRepository {
     required this.assetsService,
     required this.assetEntityConverter,
   });
+
+  @override
+  Stream<AssetEntity?> asset(String assetId) {
+    return assetsService.asset(assetId).map((model) => model != null ? assetEntityConverter.convert(model) : null);
+  }
 
   @override
   Stream<Either<Failure, List<AssetEntity>>> getCategoryAssets(
@@ -48,5 +54,31 @@ class AssetsRepositoryImpl extends AssetsRepository {
         return Left(UnknownFailure());
       }
     });
+  }
+
+  @override
+  Stream<bool> isFavorite(String assetId) {
+    return authService.authStateChanges().switchMap((user) {
+      if (user == null) {
+        return Stream.value(false);
+      }
+      return assetsService.isFavorite(user.uid, assetId);
+    });
+  }
+
+  @override
+  Future<Either<Failure, void>> toggleFavorite(String assetId) async {
+    try {
+      final address = (await authService.authStateChanges().first)?.uid;
+
+      if (address == null) {
+        return Left(UnauthorizedFailure());
+      }
+
+      await assetsService.toogleFavorite(address, assetId);
+      return const Right(null);
+    } catch (_) {
+      return Left(UnknownFailure());
+    }
   }
 }

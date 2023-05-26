@@ -28,7 +28,7 @@ class AssetsListCubit extends Cubit<AssetsListState> {
   }) : super(const AssetsListState.loading()) {
     _assetsSubscription = Rx.combineLatest2(
       assetsRepository.getCategoryAssets(category, lastAssetIdStream: _lastAssetIdController.stream, limit: 10),
-      shopRepository.getShopcart(),
+      shopRepository.shopcart(),
       (assets, shopcart) {
         emit(const AssetsListState.loading());
 

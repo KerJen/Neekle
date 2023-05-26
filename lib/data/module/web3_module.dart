@@ -5,7 +5,7 @@ import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/io.dart';
 
-import '../../core/ui/const.dart';
+import '../../core/const.dart';
 
 @module
 abstract class Web3Module {

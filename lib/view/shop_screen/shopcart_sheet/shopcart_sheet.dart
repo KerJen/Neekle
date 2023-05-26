@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,12 +6,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/di/di.dart';
 import '../../../core/helper/sheet_helper.dart';
 import '../../../core/ui/colors.dart';
-import '../../../core/ui/const.dart';
+import '../../../core/const.dart';
 import '../../../core/ui/kit/bouncing_gesture_detector.dart';
 import '../../../core/ui/kit/button.dart';
 import '../../../core/ui/kit/image.dart';
 import '../../../core/ui/kit/loading_indicator.dart';
 import '../../../core/ui/kit/state_button/state_button.dart';
+import '../../../core/ui/router/router.dart';
 import '../../../core/ui/text_styles.dart';
 import '../../../domain/assets/entity/asset_entity.dart';
 import '../../qr_sheet/qr_sheet.dart';
@@ -80,45 +82,14 @@ class _ShopcartSheetState extends State<ShopcartSheet> {
               const SizedBox(height: 32),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Text(
-                    //   'Buy for:',
-                    //   style: larger.copyWith(
-                    //     color: currentColorScheme(context).onBackground,
-                    //     fontWeight: FontWeight.w600,
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 16),
-                    _BuyButton(
-                      amount: state.mapOrNull(
+                child: _BuyButton(
+                  amount: state.mapOrNull(
                         cart: (value) => value.assets.fold(0, (prev, cur) => prev! + cur.price),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.center,
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'By purchasing, you accept the\n',
-                              style: medium.copyWith(color: currentColorScheme(context).onSurface),
-                            ),
-                            TextSpan(
-                              text: 'user agreement',
-                              style: medium.copyWith(color: currentColorScheme(context).primary),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                  ],
+                      ) ??
+                      0,
                 ),
               ),
+              const SizedBox(height: 32),
             ],
           );
         },
@@ -175,32 +146,37 @@ class _ShopcartAsset extends StatelessWidget {
           ),
         ),
       ),
-      child: Row(
-        children: [
-          AppImage(
-            height: 56,
-            width: 94,
-            borderRadius: BorderRadius.circular(8),
-            image: NetworkImage(asset.coverUrl),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              asset.title,
-              style: large.copyWith(color: currentColorScheme(context).onBackground),
+      child: BouncingGestureDetector(
+        onTap: () async {
+          context.router.push(AssetRoute(assetId: asset.id));
+        },
+        child: Row(
+          children: [
+            AppImage(
+              height: 56,
+              width: 94,
+              borderRadius: BorderRadius.circular(8),
+              image: NetworkImage(asset.coverUrl),
             ),
-          ),
-          const SizedBox(width: 8),
-          SvgPicture.asset(
-            ethereumIcon,
-            color: Colors.white,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            asset.price.toString(),
-            style: large.copyWith(color: currentColorScheme(context).onBackground, fontWeight: FontWeight.w600),
-          ),
-        ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                asset.title,
+                style: large.copyWith(color: currentColorScheme(context).onBackground),
+              ),
+            ),
+            const SizedBox(width: 8),
+            SvgPicture.asset(
+              ethereumIcon,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              asset.price.toString(),
+              style: large.copyWith(color: currentColorScheme(context).onBackground, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
       ),
     );
   }

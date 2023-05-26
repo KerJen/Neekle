@@ -5,9 +5,10 @@ import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 import '../model/asset/asset_model.dart';
-import '../model/contract_asset/contract_asset.dart';
 
 abstract class AssetsService {
+  Stream<AssetModel?> asset(String assetId);
+
   Future<List<AssetModel>> getFavoriteAssets({
     required String address,
     required String? lastAssetId,
@@ -20,6 +21,10 @@ abstract class AssetsService {
     required int limit,
     bool force = false,
   });
+
+  Stream<bool> isFavorite(String address, String assetId);
+
+  Future<void> toogleFavorite(String address, String assetId);
 
   Stream<List<AssetModel>> showcase(String address);
 }
@@ -35,6 +40,15 @@ class AssetsServiceImpl extends AssetsService {
     required this.web3,
     required this.contract,
   });
+
+  @override
+  Stream<AssetModel?> asset(String assetId) {
+    return store
+        .collection('assets')
+        .doc(assetId)
+        .snapshots()
+        .map((doc) => doc.data() != null ? AssetModel.fromJson(doc.data()!) : null);
+  }
 
   @override
   Future<List<AssetModel>> getFavoriteAssets({
@@ -76,6 +90,28 @@ class AssetsServiceImpl extends AssetsService {
 
     final models = (await query.get()).docs.map((doc) => AssetModel.fromJson(doc.data())).toList();
     return models;
+  }
+
+  @override
+  Stream<bool> isFavorite(String address, String assetId) {
+    return store
+        .collection('favorite_assets')
+        .doc(address)
+        .collection('ids')
+        .doc(assetId)
+        .snapshots()
+        .map((event) => event.data() != null);
+  }
+
+  @override
+  Future<void> toogleFavorite(String address, String assetId) async {
+    final collection = store.collection('favorite_assets').doc(address).collection('ids');
+    final doc = collection.doc(assetId);
+    if ((await doc.get()).exists) {
+      await doc.delete();
+    } else {
+      doc.set({});
+    }
   }
 
   @override

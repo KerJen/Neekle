@@ -1,18 +1,16 @@
-import 'dart:ffi';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../core/ui/const.dart';
-import '../../../core/ui/kit/bouncing_gesture_detector.dart';
-import '../../../core/ui/router/router.dart';
-import '../../../domain/assets/entity/asset_entity.dart';
-import '../rating_stars.dart';
+import '../../core/const.dart';
+import '../../core/ui/kit/bouncing_gesture_detector.dart';
+import '../../core/ui/router/router.dart';
+import '../../domain/assets/entity/asset_entity.dart';
+import 'rating_stars.dart';
 
-import '../../../core/ui/colors.dart';
-import '../../../core/ui/kit/button.dart';
-import '../../../core/ui/kit/image.dart';
-import '../../../core/ui/text_styles.dart';
+import '../../core/ui/colors.dart';
+import '../../core/ui/kit/button.dart';
+import '../../core/ui/kit/image.dart';
+import '../../core/ui/text_styles.dart';
 
 class AssetCard extends StatelessWidget {
   final AssetEntity asset;
@@ -30,7 +28,7 @@ class AssetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BouncingGestureDetector(
       onTap: () async {
-        context.router.push(AssetRoute(asset: asset));
+        context.router.push(AssetRoute(assetId: asset.id));
       },
       child: LayoutBuilder(
         builder: (context, constraints) {

@@ -8,7 +8,7 @@ import '../../core/ui/kit/bouncing_gesture_detector.dart';
 import '../../core/ui/kit/button.dart';
 import '../../core/ui/kit/loading_indicator.dart';
 import '../../core/ui/text_styles.dart';
-import '../common/asset_card/asset_card.dart';
+import '../common/asset_card.dart';
 import '../qr_sheet/qr_sheet.dart';
 import 'cubit/cubit.dart';
 

@@ -7,7 +7,7 @@ import '../../../core/ui/colors.dart';
 import '../../../core/ui/kit/loading_indicator.dart';
 import '../../../core/ui/text_styles.dart';
 import '../../../domain/assets/entity/asset_entity.dart';
-import '../../common/asset_card/asset_card.dart';
+import '../../common/asset_card.dart';
 import 'cubit/cubit.dart';
 
 const int assetsPageSize = 10;

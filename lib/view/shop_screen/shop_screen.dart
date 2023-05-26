@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/di/di.dart';
 import '../../core/ui/colors.dart';
-import '../../core/ui/const.dart';
+import '../../core/const.dart';
 import '../../core/ui/kit/loading_indicator.dart';
 import '../../core/ui/text_styles.dart';
 import 'assets_list/assets_list.dart';
@@ -80,7 +80,7 @@ class _ShopScreenState extends State<ShopScreen> with TickerProviderStateMixin {
           },
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
+          onPressed: () async {
             ShopcartSheet.show(context);
           },
           shape: const CircleBorder(),

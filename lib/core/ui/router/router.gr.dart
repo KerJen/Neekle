@@ -21,7 +21,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: AssetScreen(
           key: args.key,
-          asset: args.asset,
+          assetId: args.assetId,
         ),
       );
     },
@@ -39,13 +39,13 @@ abstract class _$AppRouter extends RootStackRouter {
 class AssetRoute extends PageRouteInfo<AssetRouteArgs> {
   AssetRoute({
     Key? key,
-    required AssetEntity asset,
+    required String assetId,
     List<PageRouteInfo>? children,
   }) : super(
           AssetRoute.name,
           args: AssetRouteArgs(
             key: key,
-            asset: asset,
+            assetId: assetId,
           ),
           initialChildren: children,
         );
@@ -58,16 +58,16 @@ class AssetRoute extends PageRouteInfo<AssetRouteArgs> {
 class AssetRouteArgs {
   const AssetRouteArgs({
     this.key,
-    required this.asset,
+    required this.assetId,
   });
 
   final Key? key;
 
-  final AssetEntity asset;
+  final String assetId;
 
   @override
   String toString() {
-    return 'AssetRouteArgs{key: $key, asset: $asset}';
+    return 'AssetRouteArgs{key: $key, assetId: $assetId}';
   }
 }
 

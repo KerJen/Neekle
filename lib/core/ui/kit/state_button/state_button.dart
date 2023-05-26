@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../colors.dart';
-import '../../const.dart';
+import '../../../const.dart';
 import '../bouncing_gesture_detector.dart';
 import '../loading_indicator.dart';
 

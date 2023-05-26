@@ -20,8 +20,7 @@ class ShopcartCubit extends Cubit<ShopcartState> {
   ShopcartCubit({
     required this.shopRepository,
   }) : super(const ShopcartState.loading()) {
-    _shopcartSubcription =
-        shopRepository.getShopcart().map((assets) => ShopcartState.cart(assets: assets)).listen(emit);
+    _shopcartSubcription = shopRepository.shopcart().map((assets) => ShopcartState.cart(assets: assets)).listen(emit);
   }
 
   void removeFromShopcart(String assetId) async {

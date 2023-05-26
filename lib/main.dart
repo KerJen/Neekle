@@ -5,7 +5,7 @@ import 'package:web_socket_channel/io.dart';
 import 'core/ui/colors.dart';
 
 import 'core/di/di.dart';
-import 'core/ui/const.dart';
+import 'core/const.dart';
 import 'core/ui/router/router.dart';
 import 'core/ui/text_styles.dart';
 

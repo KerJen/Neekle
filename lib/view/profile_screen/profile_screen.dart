@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../core/di/di.dart';
 import '../../core/ui/colors.dart';
-import '../../core/ui/const.dart';
+import '../../core/const.dart';
 import '../../core/ui/kit/bouncing_gesture_detector.dart';
 import '../../core/ui/kit/loading_indicator.dart';
 import '../../core/ui/text_styles.dart';
