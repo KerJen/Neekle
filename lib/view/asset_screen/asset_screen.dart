@@ -146,25 +146,6 @@ class _AssetScreenState extends State<AssetScreen> {
                         style: medium,
                       ),
                       const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.attach_file,
-                            color: currentColorScheme(context).onSurface,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          const Text('46.6 MB'),
-                          const Spacer(),
-                          Icon(
-                            Icons.file_copy_outlined,
-                            color: currentColorScheme(context).onSurface,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(asset.ext),
-                        ],
-                      )
                     ],
                   ),
                 );

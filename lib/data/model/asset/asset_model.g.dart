@@ -32,43 +32,33 @@ const AssetModelSchema = CollectionSchema(
       name: r'description',
       type: IsarType.string,
     ),
-    r'ext': PropertySchema(
-      id: 3,
-      name: r'ext',
-      type: IsarType.string,
-    ),
     r'id': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'id',
       type: IsarType.string,
     ),
     r'imageUrls': PropertySchema(
-      id: 5,
+      id: 4,
       name: r'imageUrls',
       type: IsarType.stringList,
     ),
     r'price': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'price',
       type: IsarType.double,
     ),
     r'rating': PropertySchema(
-      id: 7,
+      id: 6,
       name: r'rating',
       type: IsarType.double,
     ),
-    r'size': PropertySchema(
-      id: 8,
-      name: r'size',
-      type: IsarType.double,
-    ),
     r'tags': PropertySchema(
-      id: 9,
+      id: 7,
       name: r'tags',
       type: IsarType.stringList,
     ),
     r'title': PropertySchema(
-      id: 10,
+      id: 8,
       name: r'title',
       type: IsarType.string,
     )
@@ -96,7 +86,6 @@ int _assetModelEstimateSize(
   bytesCount += 3 + object.category.length * 3;
   bytesCount += 3 + object.coverUrl.length * 3;
   bytesCount += 3 + object.description.length * 3;
-  bytesCount += 3 + object.ext.length * 3;
   bytesCount += 3 + object.id.length * 3;
   bytesCount += 3 + object.imageUrls.length * 3;
   {
@@ -125,14 +114,12 @@ void _assetModelSerialize(
   writer.writeString(offsets[0], object.category);
   writer.writeString(offsets[1], object.coverUrl);
   writer.writeString(offsets[2], object.description);
-  writer.writeString(offsets[3], object.ext);
-  writer.writeString(offsets[4], object.id);
-  writer.writeStringList(offsets[5], object.imageUrls);
-  writer.writeDouble(offsets[6], object.price);
-  writer.writeDouble(offsets[7], object.rating);
-  writer.writeDouble(offsets[8], object.size);
-  writer.writeStringList(offsets[9], object.tags);
-  writer.writeString(offsets[10], object.title);
+  writer.writeString(offsets[3], object.id);
+  writer.writeStringList(offsets[4], object.imageUrls);
+  writer.writeDouble(offsets[5], object.price);
+  writer.writeDouble(offsets[6], object.rating);
+  writer.writeStringList(offsets[7], object.tags);
+  writer.writeString(offsets[8], object.title);
 }
 
 AssetModel _assetModelDeserialize(
@@ -145,14 +132,12 @@ AssetModel _assetModelDeserialize(
     category: reader.readString(offsets[0]),
     coverUrl: reader.readString(offsets[1]),
     description: reader.readString(offsets[2]),
-    ext: reader.readString(offsets[3]),
-    id: reader.readString(offsets[4]),
-    imageUrls: reader.readStringList(offsets[5]) ?? [],
-    price: reader.readDouble(offsets[6]),
-    rating: reader.readDoubleOrNull(offsets[7]),
-    size: reader.readDouble(offsets[8]),
-    tags: reader.readStringList(offsets[9]) ?? [],
-    title: reader.readString(offsets[10]),
+    id: reader.readString(offsets[3]),
+    imageUrls: reader.readStringList(offsets[4]) ?? [],
+    price: reader.readDouble(offsets[5]),
+    rating: reader.readDoubleOrNull(offsets[6]),
+    tags: reader.readStringList(offsets[7]) ?? [],
+    title: reader.readString(offsets[8]),
   );
   return object;
 }
@@ -173,18 +158,14 @@ P _assetModelDeserializeProp<P>(
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 5:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readDouble(offset)) as P;
     case 6:
-      return (reader.readDouble(offset)) as P;
-    case 7:
       return (reader.readDoubleOrNull(offset)) as P;
-    case 8:
-      return (reader.readDouble(offset)) as P;
-    case 9:
+    case 7:
       return (reader.readStringList(offset) ?? []) as P;
-    case 10:
+    case 8:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -683,136 +664,6 @@ extension AssetModelQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'description',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> extEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'ext',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> extGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'ext',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> extLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'ext',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> extBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'ext',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> extStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'ext',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> extEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'ext',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> extContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'ext',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> extMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'ext',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> extIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'ext',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> extIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'ext',
         value: '',
       ));
     });
@@ -1367,68 +1218,6 @@ extension AssetModelQueryFilter
     });
   }
 
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> sizeEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'size',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> sizeGreaterThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'size',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> sizeLessThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'size',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition> sizeBetween(
-    double lower,
-    double upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'size',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
   QueryBuilder<AssetModel, AssetModel, QAfterFilterCondition>
       tagsElementEqualTo(
     String value, {
@@ -1827,18 +1616,6 @@ extension AssetModelQuerySortBy
     });
   }
 
-  QueryBuilder<AssetModel, AssetModel, QAfterSortBy> sortByExt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ext', Sort.asc);
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterSortBy> sortByExtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ext', Sort.desc);
-    });
-  }
-
   QueryBuilder<AssetModel, AssetModel, QAfterSortBy> sortById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1872,18 +1649,6 @@ extension AssetModelQuerySortBy
   QueryBuilder<AssetModel, AssetModel, QAfterSortBy> sortByRatingDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'rating', Sort.desc);
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterSortBy> sortBySize() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'size', Sort.asc);
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterSortBy> sortBySizeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'size', Sort.desc);
     });
   }
 
@@ -1938,18 +1703,6 @@ extension AssetModelQuerySortThenBy
     });
   }
 
-  QueryBuilder<AssetModel, AssetModel, QAfterSortBy> thenByExt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ext', Sort.asc);
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterSortBy> thenByExtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ext', Sort.desc);
-    });
-  }
-
   QueryBuilder<AssetModel, AssetModel, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1998,18 +1751,6 @@ extension AssetModelQuerySortThenBy
     });
   }
 
-  QueryBuilder<AssetModel, AssetModel, QAfterSortBy> thenBySize() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'size', Sort.asc);
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QAfterSortBy> thenBySizeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'size', Sort.desc);
-    });
-  }
-
   QueryBuilder<AssetModel, AssetModel, QAfterSortBy> thenByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
@@ -2046,13 +1787,6 @@ extension AssetModelQueryWhereDistinct
     });
   }
 
-  QueryBuilder<AssetModel, AssetModel, QDistinct> distinctByExt(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'ext', caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<AssetModel, AssetModel, QDistinct> distinctById(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -2075,12 +1809,6 @@ extension AssetModelQueryWhereDistinct
   QueryBuilder<AssetModel, AssetModel, QDistinct> distinctByRating() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'rating');
-    });
-  }
-
-  QueryBuilder<AssetModel, AssetModel, QDistinct> distinctBySize() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'size');
     });
   }
 
@@ -2124,12 +1852,6 @@ extension AssetModelQueryProperty
     });
   }
 
-  QueryBuilder<AssetModel, String, QQueryOperations> extProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'ext');
-    });
-  }
-
   QueryBuilder<AssetModel, String, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
@@ -2151,12 +1873,6 @@ extension AssetModelQueryProperty
   QueryBuilder<AssetModel, double?, QQueryOperations> ratingProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'rating');
-    });
-  }
-
-  QueryBuilder<AssetModel, double, QQueryOperations> sizeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'size');
     });
   }
 
@@ -2189,13 +1905,10 @@ _$_AssetModel _$$_AssetModelFromJson(Map<String, dynamic> json) =>
       category: json['category'] as String,
       tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
       rating: (json['rating'] as num?)?.toDouble(),
-      size: (json['size'] as num).toDouble(),
-      ext: json['ext'] as String,
     );
 
 Map<String, dynamic> _$$_AssetModelToJson(_$_AssetModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
       'coverUrl': instance.coverUrl,
       'title': instance.title,
       'description': instance.description,
@@ -2204,6 +1917,4 @@ Map<String, dynamic> _$$_AssetModelToJson(_$_AssetModel instance) =>
       'category': instance.category,
       'tags': instance.tags,
       'rating': instance.rating,
-      'size': instance.size,
-      'ext': instance.ext,
     };

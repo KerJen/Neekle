@@ -36,13 +36,17 @@ class ShopRepositoryImpl extends ShopRepository {
     return isar.shopcart.watchLazy().startWith(null).map(
           (event) => isar.txnSync(
             () {
-              final model = isar.shopcart.filter().idEqualTo(assetId).findFirstSync();
+              try {
+                final model = isar.shopcart.filter().idEqualTo(assetId).findFirstSync();
 
-              if (model == null) {
+                if (model == null) {
+                  return null;
+                }
+
+                return assetEntityConverter.convert(model);
+              } catch (_) {
                 return null;
               }
-
-              return assetEntityConverter.convert(model);
             },
           ),
         );

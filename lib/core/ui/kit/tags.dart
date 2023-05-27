@@ -45,7 +45,7 @@ class AppTags extends StatelessWidget {
                   Icon(
                     Icons.close,
                     size: 16,
-                    color: currentColorScheme(context).onPrimary,
+                    color: currentColorScheme(context).primary,
                   ),
                 ]
               ],

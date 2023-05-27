@@ -1,12 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
+import '../../core/error/failure.dart';
 import '../model/asset/asset_model.dart';
 
 abstract class AssetsService {
+  Future<void> createAsset(AssetModel model);
+
+  Future<void> editAsset(AssetModel model);
+
   Stream<AssetModel?> asset(String assetId);
 
   Future<List<AssetModel>> getFavoriteAssets({
@@ -40,6 +46,16 @@ class AssetsServiceImpl extends AssetsService {
     required this.web3,
     required this.contract,
   });
+
+  @override
+  Future<void> createAsset(AssetModel model) async {
+    await store.collection('assets').add(model.toJson());
+  }
+
+  @override
+  Future<void> editAsset(AssetModel model) async {
+    await store.collection('assets').doc().update(model.toJson());
+  }
 
   @override
   Stream<AssetModel?> asset(String assetId) {

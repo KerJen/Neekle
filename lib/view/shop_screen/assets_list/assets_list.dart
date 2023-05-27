@@ -1,10 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animator/flutter_animator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../core/di/di.dart';
 import '../../../core/ui/colors.dart';
 import '../../../core/ui/kit/loading_indicator.dart';
+import '../../../core/ui/router/router.dart';
 import '../../../core/ui/text_styles.dart';
 import '../../../domain/assets/entity/asset_entity.dart';
 import '../../common/asset_card.dart';
@@ -24,9 +27,12 @@ class AssetsList extends StatefulWidget {
   State<AssetsList> createState() => _AssetsListState();
 }
 
-class _AssetsListState extends State<AssetsList> {
+class _AssetsListState extends State<AssetsList> with AutomaticKeepAliveClientMixin {
   late final AssetsListCubit _cubit;
   final _pagingController = PagingController<int, ({bool inShopcart, AssetEntity asset})>(firstPageKey: 0);
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -106,13 +112,23 @@ class _AssetsListState extends State<AssetsList> {
                 ],
               ),
               itemBuilder: (context, item, index) {
-                return AssetCard(
-                  key: ValueKey(item.asset.id),
-                  asset: item.asset,
-                  inShopcart: item.inShopcart,
-                  onShopcartStateChanged: (isAdd) {
-                    isAdd ? _cubit.addToShopcart(item.asset) : _cubit.removeFromShopcart(item.asset.id);
-                  },
+                return FadeInDown(
+                  preferences: AnimationPreferences(
+                    magnitude: 0.15,
+                    offset: Duration(milliseconds: index % 2 == 0 ? 100 : 200),
+                    duration: const Duration(milliseconds: 400),
+                  ),
+                  child: AssetCard(
+                    key: ValueKey(item.asset.id),
+                    asset: item.asset,
+                    inShopcart: item.inShopcart,
+                    onPressed: () async {
+                      context.router.push(AssetRoute(assetId: item.asset.id));
+                    },
+                    onShopcartStateChanged: (isAdd) {
+                      isAdd ? _cubit.addToShopcart(item.asset) : _cubit.removeFromShopcart(item.asset.id);
+                    },
+                  ),
                 );
               },
               // animateTransitions: true,

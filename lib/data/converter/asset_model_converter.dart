@@ -19,8 +19,6 @@ class AssetModelConverter extends Converter<AssetEntity, AssetModel> {
       category: input.category,
       tags: input.tags,
       rating: input.rating,
-      size: input.size,
-      ext: input.ext,
     );
   }
 }

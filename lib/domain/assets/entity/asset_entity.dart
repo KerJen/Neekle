@@ -14,7 +14,5 @@ class AssetEntity with _$AssetEntity {
     required String category,
     required List<String> tags,
     required double? rating,
-    required double size,
-    required String ext,
   }) = _AssetEntity;
 }

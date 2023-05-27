@@ -103,21 +103,20 @@ class _SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: TextField(
-          decoration: InputDecoration(
-            hintText: 'Search',
-            prefixIconConstraints: const BoxConstraints(
-              maxHeight: 18,
-              minWidth: 44,
-            ),
-            prefixIcon: Icon(
-              Icons.search,
-              size: 18,
-              color: currentColorScheme(context).onSurface,
-            ),
-            contentPadding: const EdgeInsets.only(top: 6, bottom: 6, right: 16),
-            isCollapsed: true,
+            decoration: filledInputDecoration(context).copyWith(
+          hintText: 'Search',
+          prefixIconConstraints: const BoxConstraints(
+            maxHeight: 18,
+            minWidth: 44,
           ),
-        ),
+          prefixIcon: Icon(
+            Icons.search,
+            size: 18,
+            color: currentColorScheme(context).onSurface,
+          ),
+          contentPadding: const EdgeInsets.only(top: 6, bottom: 6, right: 16),
+          isCollapsed: true,
+        )),
       ),
     );
   }

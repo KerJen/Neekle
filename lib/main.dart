@@ -130,9 +130,13 @@ class _MainAppState extends State<MainApp> {
           titleLarge: headline,
         ),
         inputDecorationTheme: InputDecorationTheme(
-          filled: true,
+          filled: false,
           border: OutlineInputBorder(
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(color: currentColorScheme(context).surface),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: currentColorScheme(context).surface),
             borderRadius: BorderRadius.circular(8),
           ),
           hintStyle: medium.copyWith(color: currentColorScheme(context).onSurface),

@@ -6,6 +6,7 @@ import '../../domain/assets/entity/asset_entity.dart';
 import '../../core/error/failure.dart';
 import '../../domain/assets/repository/assets_repository.dart';
 import '../converter/asset_entity_converter.dart';
+import '../converter/asset_model_converter.dart';
 import '../service/assets_service.dart';
 import '../service/auth_service.dart';
 
@@ -14,13 +15,35 @@ class AssetsRepositoryImpl extends AssetsRepository {
   final AuthService authService;
   final AssetsService assetsService;
 
+  final AssetModelConverter assetModelConverter;
   final AssetEntityConverter assetEntityConverter;
 
   AssetsRepositoryImpl({
     required this.authService,
     required this.assetsService,
+    required this.assetModelConverter,
     required this.assetEntityConverter,
   });
+
+  @override
+  Future<Either<Failure, void>> createAsset(AssetEntity asset) async {
+    try {
+      await assetsService.createAsset(assetModelConverter.convert(asset));
+      return const Right(null);
+    } catch (_) {
+      return Left(UnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> editAsset(AssetEntity asset) async {
+    try {
+      await assetsService.editAsset(assetModelConverter.convert(asset));
+      return const Right(null);
+    } catch (_) {
+      return Left(UnknownFailure());
+    }
+  }
 
   @override
   Stream<AssetEntity?> asset(String assetId) {

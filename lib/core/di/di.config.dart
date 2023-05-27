@@ -18,9 +18,9 @@ import 'package:injectable/injectable.dart' as _i2;
 import 'package:isar/isar.dart' as _i10;
 import 'package:neekle/data/converter/asset_entity_converter.dart' as _i3;
 import 'package:neekle/data/converter/asset_model_converter.dart' as _i4;
-import 'package:neekle/data/module/database_module.dart' as _i30;
-import 'package:neekle/data/module/firebase_module.dart' as _i29;
-import 'package:neekle/data/module/web3_module.dart' as _i31;
+import 'package:neekle/data/module/database_module.dart' as _i31;
+import 'package:neekle/data/module/firebase_module.dart' as _i30;
+import 'package:neekle/data/module/web3_module.dart' as _i32;
 import 'package:neekle/data/repository/assets_repository_impl.dart' as _i19;
 import 'package:neekle/data/repository/profile_repository_impl.dart' as _i21;
 import 'package:neekle/data/repository/shop_repository_impl.dart' as _i12;
@@ -31,16 +31,18 @@ import 'package:neekle/domain/assets/repository/assets_repository.dart' as _i18;
 import 'package:neekle/domain/profile/repository/profile_repository.dart'
     as _i20;
 import 'package:neekle/domain/shop/repository/shop_repository.dart' as _i11;
-import 'package:neekle/view/asset_screen/cubit/cubit.dart' as _i26;
-import 'package:neekle/view/profile_screen/cubit/cubit.dart' as _i28;
+import 'package:neekle/view/asset_screen/cubit/cubit.dart' as _i27;
+import 'package:neekle/view/profile_screen/cubit/cubit.dart' as _i29;
 import 'package:neekle/view/qr_sheet/cubit/cubit.dart' as _i22;
-import 'package:neekle/view/shop_screen/assets_list/cubit/cubit.dart' as _i27;
-import 'package:neekle/view/shop_screen/cubit/cubit.dart' as _i23;
+import 'package:neekle/view/shop_screen/assets_list/cubit/cubit.dart' as _i28;
+import 'package:neekle/view/shop_screen/cubit/cubit.dart' as _i24;
 import 'package:neekle/view/shop_screen/shopcart_sheet/buy_button/cubit/cubit.dart'
-    as _i24;
+    as _i25;
 import 'package:neekle/view/shop_screen/shopcart_sheet/cubit/cubit.dart'
     as _i13;
-import 'package:neekle/view/studio_screen/cubit/cubit.dart' as _i25;
+import 'package:neekle/view/studio_screen/cubit/cubit.dart' as _i26;
+import 'package:neekle/view/studio_screen/set_asset_sheet/cubit/cubit.dart'
+    as _i23;
 import 'package:walletconnect_dart/walletconnect_dart.dart' as _i14;
 import 'package:web3dart/web3dart.dart' as _i5;
 
@@ -99,6 +101,7 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i18.AssetsRepository>(() => _i19.AssetsRepositoryImpl(
           authService: gh<_i16.AuthService>(),
           assetsService: gh<_i15.AssetsService>(),
+          assetModelConverter: gh<_i4.AssetModelConverter>(),
           assetEntityConverter: gh<_i3.AssetEntityConverter>(),
         ));
     gh.lazySingleton<_i20.ProfileRepository>(() => _i21.ProfileRepositoryImpl(
@@ -109,38 +112,40 @@ extension GetItInjectableX on _i1.GetIt {
         ));
     gh.factory<_i22.QrCubit>(
         () => _i22.QrCubit(profileRepository: gh<_i20.ProfileRepository>()));
-    gh.factory<_i23.ShopCubit>(
-        () => _i23.ShopCubit(profileRepository: gh<_i20.ProfileRepository>()));
-    gh.factory<_i24.ShopcartBuyButtonCubit>(() => _i24.ShopcartBuyButtonCubit(
+    gh.factory<_i23.SetAssetCubit>(() =>
+        _i23.SetAssetCubit(assetsRepository: gh<_i18.AssetsRepository>()));
+    gh.factory<_i24.ShopCubit>(
+        () => _i24.ShopCubit(profileRepository: gh<_i20.ProfileRepository>()));
+    gh.factory<_i25.ShopcartBuyButtonCubit>(() => _i25.ShopcartBuyButtonCubit(
         profileRepository: gh<_i20.ProfileRepository>()));
-    gh.factory<_i25.StudioCubit>(() =>
-        _i25.StudioCubit(profileRepository: gh<_i20.ProfileRepository>()));
-    gh.factoryParam<_i26.AssetCubit, String, dynamic>((
+    gh.factory<_i26.StudioCubit>(() =>
+        _i26.StudioCubit(profileRepository: gh<_i20.ProfileRepository>()));
+    gh.factoryParam<_i27.AssetCubit, String, dynamic>((
       assetId,
       _,
     ) =>
-        _i26.AssetCubit(
+        _i27.AssetCubit(
           assetId: assetId,
           assetsRepository: gh<_i18.AssetsRepository>(),
           shopRepository: gh<_i11.ShopRepository>(),
         ));
-    gh.factoryParam<_i27.AssetsListCubit, String?, dynamic>((
+    gh.factoryParam<_i28.AssetsListCubit, String?, dynamic>((
       category,
       _,
     ) =>
-        _i27.AssetsListCubit(
+        _i28.AssetsListCubit(
           category: category,
           assetsRepository: gh<_i18.AssetsRepository>(),
           shopRepository: gh<_i11.ShopRepository>(),
         ));
-    gh.factory<_i28.ProfileCubit>(() =>
-        _i28.ProfileCubit(profileRepository: gh<_i20.ProfileRepository>()));
+    gh.factory<_i29.ProfileCubit>(() =>
+        _i29.ProfileCubit(profileRepository: gh<_i20.ProfileRepository>()));
     return this;
   }
 }
 
-class _$FirebaseModule extends _i29.FirebaseModule {}
+class _$FirebaseModule extends _i30.FirebaseModule {}
 
-class _$DatabaseModule extends _i30.DatabaseModule {}
+class _$DatabaseModule extends _i31.DatabaseModule {}
 
-class _$Web3Module extends _i31.Web3Module {}
+class _$Web3Module extends _i32.Web3Module {}

@@ -20,6 +20,7 @@ AssetModel _$AssetModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AssetModel {
+  @JsonKey(includeToJson: false)
   String get id => throw _privateConstructorUsedError;
   String get coverUrl => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
@@ -29,8 +30,6 @@ mixin _$AssetModel {
   String get category => throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
   double? get rating => throw _privateConstructorUsedError;
-  double get size => throw _privateConstructorUsedError;
-  String get ext => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +44,7 @@ abstract class $AssetModelCopyWith<$Res> {
       _$AssetModelCopyWithImpl<$Res, AssetModel>;
   @useResult
   $Res call(
-      {String id,
+      {@JsonKey(includeToJson: false) String id,
       String coverUrl,
       String title,
       String description,
@@ -53,9 +52,7 @@ abstract class $AssetModelCopyWith<$Res> {
       List<String> imageUrls,
       String category,
       List<String> tags,
-      double? rating,
-      double size,
-      String ext});
+      double? rating});
 }
 
 /// @nodoc
@@ -80,8 +77,6 @@ class _$AssetModelCopyWithImpl<$Res, $Val extends AssetModel>
     Object? category = null,
     Object? tags = null,
     Object? rating = freezed,
-    Object? size = null,
-    Object? ext = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -120,14 +115,6 @@ class _$AssetModelCopyWithImpl<$Res, $Val extends AssetModel>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as double?,
-      size: null == size
-          ? _value.size
-          : size // ignore: cast_nullable_to_non_nullable
-              as double,
-      ext: null == ext
-          ? _value.ext
-          : ext // ignore: cast_nullable_to_non_nullable
-              as String,
     ) as $Val);
   }
 }
@@ -141,7 +128,7 @@ abstract class _$$_AssetModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {@JsonKey(includeToJson: false) String id,
       String coverUrl,
       String title,
       String description,
@@ -149,9 +136,7 @@ abstract class _$$_AssetModelCopyWith<$Res>
       List<String> imageUrls,
       String category,
       List<String> tags,
-      double? rating,
-      double size,
-      String ext});
+      double? rating});
 }
 
 /// @nodoc
@@ -174,8 +159,6 @@ class __$$_AssetModelCopyWithImpl<$Res>
     Object? category = null,
     Object? tags = null,
     Object? rating = freezed,
-    Object? size = null,
-    Object? ext = null,
   }) {
     return _then(_$_AssetModel(
       id: null == id
@@ -214,14 +197,6 @@ class __$$_AssetModelCopyWithImpl<$Res>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as double?,
-      size: null == size
-          ? _value.size
-          : size // ignore: cast_nullable_to_non_nullable
-              as double,
-      ext: null == ext
-          ? _value.ext
-          : ext // ignore: cast_nullable_to_non_nullable
-              as String,
     ));
   }
 }
@@ -230,7 +205,7 @@ class __$$_AssetModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_AssetModel extends _AssetModel {
   const _$_AssetModel(
-      {required this.id,
+      {@JsonKey(includeToJson: false) required this.id,
       required this.coverUrl,
       required this.title,
       required this.description,
@@ -238,9 +213,7 @@ class _$_AssetModel extends _AssetModel {
       required final List<String> imageUrls,
       required this.category,
       required final List<String> tags,
-      required this.rating,
-      required this.size,
-      required this.ext})
+      required this.rating})
       : _imageUrls = imageUrls,
         _tags = tags,
         super._();
@@ -249,6 +222,7 @@ class _$_AssetModel extends _AssetModel {
       _$$_AssetModelFromJson(json);
 
   @override
+  @JsonKey(includeToJson: false)
   final String id;
   @override
   final String coverUrl;
@@ -278,14 +252,10 @@ class _$_AssetModel extends _AssetModel {
 
   @override
   final double? rating;
-  @override
-  final double size;
-  @override
-  final String ext;
 
   @override
   String toString() {
-    return 'AssetModel(id: $id, coverUrl: $coverUrl, title: $title, description: $description, price: $price, imageUrls: $imageUrls, category: $category, tags: $tags, rating: $rating, size: $size, ext: $ext)';
+    return 'AssetModel(id: $id, coverUrl: $coverUrl, title: $title, description: $description, price: $price, imageUrls: $imageUrls, category: $category, tags: $tags, rating: $rating)';
   }
 
   @override
@@ -305,9 +275,7 @@ class _$_AssetModel extends _AssetModel {
             (identical(other.category, category) ||
                 other.category == category) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
-            (identical(other.rating, rating) || other.rating == rating) &&
-            (identical(other.size, size) || other.size == size) &&
-            (identical(other.ext, ext) || other.ext == ext));
+            (identical(other.rating, rating) || other.rating == rating));
   }
 
   @JsonKey(ignore: true)
@@ -322,9 +290,7 @@ class _$_AssetModel extends _AssetModel {
       const DeepCollectionEquality().hash(_imageUrls),
       category,
       const DeepCollectionEquality().hash(_tags),
-      rating,
-      size,
-      ext);
+      rating);
 
   @JsonKey(ignore: true)
   @override
@@ -342,7 +308,7 @@ class _$_AssetModel extends _AssetModel {
 
 abstract class _AssetModel extends AssetModel {
   const factory _AssetModel(
-      {required final String id,
+      {@JsonKey(includeToJson: false) required final String id,
       required final String coverUrl,
       required final String title,
       required final String description,
@@ -350,15 +316,14 @@ abstract class _AssetModel extends AssetModel {
       required final List<String> imageUrls,
       required final String category,
       required final List<String> tags,
-      required final double? rating,
-      required final double size,
-      required final String ext}) = _$_AssetModel;
+      required final double? rating}) = _$_AssetModel;
   const _AssetModel._() : super._();
 
   factory _AssetModel.fromJson(Map<String, dynamic> json) =
       _$_AssetModel.fromJson;
 
   @override
+  @JsonKey(includeToJson: false)
   String get id;
   @override
   String get coverUrl;
@@ -376,10 +341,6 @@ abstract class _AssetModel extends AssetModel {
   List<String> get tags;
   @override
   double? get rating;
-  @override
-  double get size;
-  @override
-  String get ext;
   @override
   @JsonKey(ignore: true)
   _$$_AssetModelCopyWith<_$_AssetModel> get copyWith =>

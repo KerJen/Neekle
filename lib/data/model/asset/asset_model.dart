@@ -10,7 +10,7 @@ class AssetModel with _$AssetModel {
   const AssetModel._();
 
   const factory AssetModel({
-    required String id,
+    @JsonKey(includeToJson: false) required String id,
     required String coverUrl,
     required String title,
     required String description,
@@ -19,8 +19,6 @@ class AssetModel with _$AssetModel {
     required String category,
     required List<String> tags,
     required double? rating,
-    required double size,
-    required String ext,
   }) = _AssetModel;
 
   Id get isarId => Isar.autoIncrement;

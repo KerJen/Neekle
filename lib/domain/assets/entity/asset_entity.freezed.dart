@@ -25,8 +25,6 @@ mixin _$AssetEntity {
   String get category => throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
   double? get rating => throw _privateConstructorUsedError;
-  double get size => throw _privateConstructorUsedError;
-  String get ext => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AssetEntityCopyWith<AssetEntity> get copyWith =>
@@ -48,9 +46,7 @@ abstract class $AssetEntityCopyWith<$Res> {
       List<String> imageUrls,
       String category,
       List<String> tags,
-      double? rating,
-      double size,
-      String ext});
+      double? rating});
 }
 
 /// @nodoc
@@ -75,8 +71,6 @@ class _$AssetEntityCopyWithImpl<$Res, $Val extends AssetEntity>
     Object? category = null,
     Object? tags = null,
     Object? rating = freezed,
-    Object? size = null,
-    Object? ext = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -115,14 +109,6 @@ class _$AssetEntityCopyWithImpl<$Res, $Val extends AssetEntity>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as double?,
-      size: null == size
-          ? _value.size
-          : size // ignore: cast_nullable_to_non_nullable
-              as double,
-      ext: null == ext
-          ? _value.ext
-          : ext // ignore: cast_nullable_to_non_nullable
-              as String,
     ) as $Val);
   }
 }
@@ -144,9 +130,7 @@ abstract class _$$_AssetEntityCopyWith<$Res>
       List<String> imageUrls,
       String category,
       List<String> tags,
-      double? rating,
-      double size,
-      String ext});
+      double? rating});
 }
 
 /// @nodoc
@@ -169,8 +153,6 @@ class __$$_AssetEntityCopyWithImpl<$Res>
     Object? category = null,
     Object? tags = null,
     Object? rating = freezed,
-    Object? size = null,
-    Object? ext = null,
   }) {
     return _then(_$_AssetEntity(
       id: null == id
@@ -209,14 +191,6 @@ class __$$_AssetEntityCopyWithImpl<$Res>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as double?,
-      size: null == size
-          ? _value.size
-          : size // ignore: cast_nullable_to_non_nullable
-              as double,
-      ext: null == ext
-          ? _value.ext
-          : ext // ignore: cast_nullable_to_non_nullable
-              as String,
     ));
   }
 }
@@ -233,9 +207,7 @@ class _$_AssetEntity implements _AssetEntity {
       required final List<String> imageUrls,
       required this.category,
       required final List<String> tags,
-      required this.rating,
-      required this.size,
-      required this.ext})
+      required this.rating})
       : _imageUrls = imageUrls,
         _tags = tags;
 
@@ -269,14 +241,10 @@ class _$_AssetEntity implements _AssetEntity {
 
   @override
   final double? rating;
-  @override
-  final double size;
-  @override
-  final String ext;
 
   @override
   String toString() {
-    return 'AssetEntity(id: $id, coverUrl: $coverUrl, title: $title, description: $description, price: $price, imageUrls: $imageUrls, category: $category, tags: $tags, rating: $rating, size: $size, ext: $ext)';
+    return 'AssetEntity(id: $id, coverUrl: $coverUrl, title: $title, description: $description, price: $price, imageUrls: $imageUrls, category: $category, tags: $tags, rating: $rating)';
   }
 
   @override
@@ -296,9 +264,7 @@ class _$_AssetEntity implements _AssetEntity {
             (identical(other.category, category) ||
                 other.category == category) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
-            (identical(other.rating, rating) || other.rating == rating) &&
-            (identical(other.size, size) || other.size == size) &&
-            (identical(other.ext, ext) || other.ext == ext));
+            (identical(other.rating, rating) || other.rating == rating));
   }
 
   @override
@@ -312,9 +278,7 @@ class _$_AssetEntity implements _AssetEntity {
       const DeepCollectionEquality().hash(_imageUrls),
       category,
       const DeepCollectionEquality().hash(_tags),
-      rating,
-      size,
-      ext);
+      rating);
 
   @JsonKey(ignore: true)
   @override
@@ -333,9 +297,7 @@ abstract class _AssetEntity implements AssetEntity {
       required final List<String> imageUrls,
       required final String category,
       required final List<String> tags,
-      required final double? rating,
-      required final double size,
-      required final String ext}) = _$_AssetEntity;
+      required final double? rating}) = _$_AssetEntity;
 
   @override
   String get id;
@@ -355,10 +317,6 @@ abstract class _AssetEntity implements AssetEntity {
   List<String> get tags;
   @override
   double? get rating;
-  @override
-  double get size;
-  @override
-  String get ext;
   @override
   @JsonKey(ignore: true)
   _$$_AssetEntityCopyWith<_$_AssetEntity> get copyWith =>

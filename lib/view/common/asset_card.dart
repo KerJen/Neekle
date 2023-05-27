@@ -1,9 +1,7 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/const.dart';
 import '../../core/ui/kit/bouncing_gesture_detector.dart';
-import '../../core/ui/router/router.dart';
 import '../../domain/assets/entity/asset_entity.dart';
 import 'rating_stars.dart';
 
@@ -15,21 +13,21 @@ import '../../core/ui/text_styles.dart';
 class AssetCard extends StatelessWidget {
   final AssetEntity asset;
   final bool inShopcart;
+  final VoidCallback? onPressed;
   final Function(bool inShopcart)? onShopcartStateChanged;
 
   const AssetCard({
     super.key,
     required this.asset,
     this.inShopcart = false,
+    this.onPressed,
     this.onShopcartStateChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return BouncingGestureDetector(
-      onTap: () async {
-        context.router.push(AssetRoute(assetId: asset.id));
-      },
+      onTap: onPressed,
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
@@ -127,9 +125,11 @@ class AssetCard extends StatelessWidget {
                                       ? currentColorScheme(context).surface
                                       : currentColorScheme(context).secondaryContainer,
                                   borderRadius: BorderRadius.circular(14),
-                                  onTap: () {
-                                    onShopcartStateChanged!(!inShopcart);
-                                  },
+                                  onTap: onPressed != null
+                                      ? () {
+                                          onShopcartStateChanged!(!inShopcart);
+                                        }
+                                      : null,
                                   child: Icon(
                                     key: ValueKey(inShopcart),
                                     inShopcart ? Icons.remove_shopping_cart_outlined : Icons.shopping_cart_outlined,
