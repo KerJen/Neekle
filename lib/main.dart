@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 import 'core/ui/colors.dart';
@@ -13,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
 
-  runApp(MainApp());
+  runApp(const MainApp());
 }
 
 class MainApp extends StatefulWidget {
@@ -45,23 +46,22 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
 
-    // final authorAddress = EthereumAddress.fromHex('0x7D1907ea2AEAb4789eA27ED1154f51cf13ED7bE1');
 
-    // web3
-    //     .events(
-    //   FilterOptions(
-    //     address: contract.address,
-    //     topics: [
-    //       [bytesToHex(contract.event('AssetCreated').signature, padToEvenLength: true, include0x: true)],
-    //       // [bytesToHex(authorAddress.addressBytes, forcePadLength: 64, include0x: true)],
-    //     ],
-    //   ),
-    // )
-    //     .listen((event) {
-    //   print(contract.event('AssetCreated').decodeResults(event.topics!, event.data!));
-    // }).onDone(() {
-    //   print('done');
-    // });
+    web3
+        .events(
+      FilterOptions(
+        address: contract.address,
+        topics: [
+          [bytesToHex(contract.event('AssetCreated').signature, padToEvenLength: true, include0x: true)],
+          // [bytesToHex(authorAddress.addressBytes, forcePadLength: 64, include0x: true)],
+        ],
+      ),
+    )
+        .listen((event) {
+      print(contract.event('AssetCreated').decodeResults(event.topics!, event.data!));
+    }).onDone(() {
+      print('done');
+    });
 
     // createNewAsset();
   }
@@ -69,9 +69,9 @@ class _MainAppState extends State<MainApp> {
   // void m() async {}
 
   void createNewAsset() async {
-    final seller = EthPrivateKey.fromHex('ab7b84abe42038b00d6d452e23406520a18a3f0d80e3ace632907e71ba65882f');
-    const assetId = 'YhMUu3BqvBbqFGKX3ltl';
-    const assetLink = 'https://example.com/asset2';
+    final seller = EthPrivateKey.fromHex('18c9833071320d0459e39052a580f5062b27accfbd0099f148fcfcb94d999def');
+    const assetId = 'XO6l7ScUNT99ADMlIoZl';
+    const assetLink = 'https://example.com/asset10';
     final price = BigInt.from(10000000000000000); // 0.01 ETH in Wei
 
     // final t = await getIt.get<Web3Client>().getBalance(seller);
@@ -81,6 +81,8 @@ class _MainAppState extends State<MainApp> {
 
   Future<void> createAsset(Credentials seller, String assetId, String assetLink, BigInt price) async {
     // final abi = await rootBundle.loadString('assets/strings/abi.json');
+
+    // final cred = WalletConnectEthereumCredentials(provider: EthereumWalletConnectProvider()).sendTransaction(transaction)
 
     final createAssetFunction = contract.function('createAsset');
 

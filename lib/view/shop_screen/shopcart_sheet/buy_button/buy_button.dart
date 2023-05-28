@@ -26,6 +26,11 @@ class _BuyButtonState extends State<_BuyButton> {
                 isAuthorized = value.isAuthorized;
               });
             },
+            bought: (value) {
+              Future.delayed(const Duration(milliseconds: 500), () async {
+                context.router.pop();
+              });
+            },
           );
         },
         builder: (context, state) {
@@ -58,9 +63,11 @@ class _BuyButtonState extends State<_BuyButton> {
 
                       return StateButton(
                         key: ValueKey(widget.amount),
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<ShopcartBuyButtonCubit>().buyAssets();
+                        },
                         state: state.maybeMap(
-                          loading: (_) => const StateButtonState.loading(),
+                          loading: (_) => StateButtonState.loading(color: currentColorScheme(context).onBackground),
                           bought: (value) => const StateButtonState.success(child: Icon(Icons.done)),
                           failure: (_) => const StateButtonState.failed(message: 'Failed'),
                           orElse: () {

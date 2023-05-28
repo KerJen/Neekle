@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -8,9 +7,9 @@ import '../../core/ui/colors.dart';
 import '../../core/ui/kit/bouncing_gesture_detector.dart';
 import '../../core/ui/kit/button.dart';
 import '../../core/ui/kit/loading_indicator.dart';
-import '../../core/ui/router/router.dart';
 import '../../core/ui/text_styles.dart';
 import '../common/asset_card.dart';
+import '../common/empty_placeholder.dart';
 import '../qr_sheet/qr_sheet.dart';
 import 'cubit/cubit.dart';
 import 'set_asset_sheet/set_asset_sheet.dart';
@@ -112,26 +111,15 @@ class _StudioScreenState extends State<StudioScreen> {
                             ),
                           ),
                           if (value.showcase.isEmpty)
-                            SliverFillRemaining(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.list_alt,
-                                    size: 64,
-                                    color: currentColorScheme(context).onSurface,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    'No assets here... yet :)',
-                                    style: larger.copyWith(fontWeight: FontWeight.bold),
-                                  )
-                                ],
+                            const SliverFillRemaining(
+                              child: EmptyPlaceholder(
+                                icon: Icons.list_alt,
+                                title: 'No assets here... yet :)',
                               ),
                             )
                           else
                             SliverPadding(
-                              padding: const EdgeInsets.only(top: 16),
+                              padding: const EdgeInsets.only(top: 16, bottom: 32),
                               sliver: SliverGrid(
                                 delegate: SliverChildBuilderDelegate(
                                   childCount: value.showcase.length,

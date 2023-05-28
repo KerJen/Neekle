@@ -8,13 +8,13 @@ import '../../../core/helper/sheet_helper.dart';
 import '../../../core/ui/colors.dart';
 import '../../../core/const.dart';
 import '../../../core/ui/kit/bouncing_gesture_detector.dart';
-import '../../../core/ui/kit/button.dart';
 import '../../../core/ui/kit/image.dart';
 import '../../../core/ui/kit/loading_indicator.dart';
 import '../../../core/ui/kit/state_button/state_button.dart';
 import '../../../core/ui/router/router.dart';
 import '../../../core/ui/text_styles.dart';
 import '../../../domain/assets/entity/asset_entity.dart';
+import '../../common/asset_item.dart';
 import '../../qr_sheet/qr_sheet.dart';
 import 'buy_button/cubit/cubit.dart';
 import 'cubit/cubit.dart';
@@ -71,7 +71,22 @@ class _ShopcartSheetState extends State<ShopcartSheet> {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           itemBuilder: (context, index) {
                             final asset = value.assets[index];
-                            return _ShopcartAsset(asset: asset);
+                            return Dismissible(
+                              key: ValueKey(asset),
+                              onDismissed: (_) => context.read<ShopcartCubit>().removeFromShopcart(asset.id),
+                              direction: DismissDirection.endToStart,
+                              background: Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Icon(
+                                    Icons.delete_outline,
+                                    color: currentColorScheme(context).onSurface,
+                                  ),
+                                ),
+                              ),
+                              child: AssetItem(asset: asset),
+                            );
                           },
                           separatorBuilder: (context, index) => const SizedBox(height: 16),
                         )
@@ -118,65 +133,6 @@ class _ShopcartPlaceholder extends StatelessWidget {
             style: larger.copyWith(fontWeight: FontWeight.bold),
           )
         ],
-      ),
-    );
-  }
-}
-
-class _ShopcartAsset extends StatelessWidget {
-  const _ShopcartAsset({
-    required this.asset,
-  });
-
-  final AssetEntity asset;
-
-  @override
-  Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey(asset),
-      onDismissed: (_) => context.read<ShopcartCubit>().removeFromShopcart(asset.id),
-      direction: DismissDirection.endToStart,
-      background: Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Icon(
-            Icons.delete_outline,
-            color: currentColorScheme(context).onSurface,
-          ),
-        ),
-      ),
-      child: BouncingGestureDetector(
-        onTap: () async {
-          context.router.push(AssetRoute(assetId: asset.id));
-        },
-        child: Row(
-          children: [
-            AppImage(
-              height: 56,
-              width: 94,
-              borderRadius: BorderRadius.circular(8),
-              image: NetworkImage(asset.coverUrl),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                asset.title,
-                style: large.copyWith(color: currentColorScheme(context).onBackground),
-              ),
-            ),
-            const SizedBox(width: 8),
-            SvgPicture.asset(
-              ethereumIcon,
-              color: Colors.white,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              asset.price.toString(),
-              style: large.copyWith(color: currentColorScheme(context).onBackground, fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
       ),
     );
   }

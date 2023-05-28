@@ -11,10 +11,12 @@ dependencies:
     sdk: flutter
 
   # Firebase
+  uuid: ^3.0.7
   firebase_core: ^2.10.0
   firebase_auth: ^4.4.2
   cloud_firestore: ^4.5.3
   cloud_functions: ^4.1.1
+  firebase_storage: ^11.2.1
 
   # State management
   flutter_bloc: ^8.1.2
@@ -29,6 +31,7 @@ dependencies:
   # Web3
   web3dart: ^2.6.1
   walletconnect_dart: ^0.0.11
+  walletconnect_secure_storage: ^1.0.0
 
   # DB
   isar: ^3.1.0+1
@@ -52,6 +55,7 @@ dependencies:
   path_provider: ^2.0.15
   flutter_animator: ^3.2.2
   file_picker: ^5.3.1
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:

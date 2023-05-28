@@ -19,7 +19,7 @@ mixin _$StateButtonState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Widget child) base,
-    required TResult Function() loading,
+    required TResult Function(Color? color) loading,
     required TResult Function(Widget child) success,
     required TResult Function(String message) failed,
   }) =>
@@ -27,7 +27,7 @@ mixin _$StateButtonState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Widget child)? base,
-    TResult? Function()? loading,
+    TResult? Function(Color? color)? loading,
     TResult? Function(Widget child)? success,
     TResult? Function(String message)? failed,
   }) =>
@@ -35,7 +35,7 @@ mixin _$StateButtonState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Widget child)? base,
-    TResult Function()? loading,
+    TResult Function(Color? color)? loading,
     TResult Function(Widget child)? success,
     TResult Function(String message)? failed,
     required TResult orElse(),
@@ -152,7 +152,7 @@ class _$_BaseStateButtonState implements _BaseStateButtonState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Widget child) base,
-    required TResult Function() loading,
+    required TResult Function(Color? color) loading,
     required TResult Function(Widget child) success,
     required TResult Function(String message) failed,
   }) {
@@ -163,7 +163,7 @@ class _$_BaseStateButtonState implements _BaseStateButtonState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Widget child)? base,
-    TResult? Function()? loading,
+    TResult? Function(Color? color)? loading,
     TResult? Function(Widget child)? success,
     TResult? Function(String message)? failed,
   }) {
@@ -174,7 +174,7 @@ class _$_BaseStateButtonState implements _BaseStateButtonState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Widget child)? base,
-    TResult Function()? loading,
+    TResult Function(Color? color)? loading,
     TResult Function(Widget child)? success,
     TResult Function(String message)? failed,
     required TResult orElse(),
@@ -238,6 +238,8 @@ abstract class _$$_LoadingStateButtonStateCopyWith<$Res> {
   factory _$$_LoadingStateButtonStateCopyWith(_$_LoadingStateButtonState value,
           $Res Function(_$_LoadingStateButtonState) then) =
       __$$_LoadingStateButtonStateCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Color? color});
 }
 
 /// @nodoc
@@ -247,61 +249,86 @@ class __$$_LoadingStateButtonStateCopyWithImpl<$Res>
   __$$_LoadingStateButtonStateCopyWithImpl(_$_LoadingStateButtonState _value,
       $Res Function(_$_LoadingStateButtonState) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? color = freezed,
+  }) {
+    return _then(_$_LoadingStateButtonState(
+      color: freezed == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as Color?,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_LoadingStateButtonState implements _LoadingStateButtonState {
-  const _$_LoadingStateButtonState();
+  const _$_LoadingStateButtonState({this.color});
+
+  @override
+  final Color? color;
 
   @override
   String toString() {
-    return 'StateButtonState.loading()';
+    return 'StateButtonState.loading(color: $color)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_LoadingStateButtonState);
+            other is _$_LoadingStateButtonState &&
+            (identical(other.color, color) || other.color == color));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, color);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_LoadingStateButtonStateCopyWith<_$_LoadingStateButtonState>
+      get copyWith =>
+          __$$_LoadingStateButtonStateCopyWithImpl<_$_LoadingStateButtonState>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Widget child) base,
-    required TResult Function() loading,
+    required TResult Function(Color? color) loading,
     required TResult Function(Widget child) success,
     required TResult Function(String message) failed,
   }) {
-    return loading();
+    return loading(color);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Widget child)? base,
-    TResult? Function()? loading,
+    TResult? Function(Color? color)? loading,
     TResult? Function(Widget child)? success,
     TResult? Function(String message)? failed,
   }) {
-    return loading?.call();
+    return loading?.call(color);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Widget child)? base,
-    TResult Function()? loading,
+    TResult Function(Color? color)? loading,
     TResult Function(Widget child)? success,
     TResult Function(String message)? failed,
     required TResult orElse(),
   }) {
     if (loading != null) {
-      return loading();
+      return loading(color);
     }
     return orElse();
   }
@@ -345,7 +372,13 @@ class _$_LoadingStateButtonState implements _LoadingStateButtonState {
 }
 
 abstract class _LoadingStateButtonState implements StateButtonState {
-  const factory _LoadingStateButtonState() = _$_LoadingStateButtonState;
+  const factory _LoadingStateButtonState({final Color? color}) =
+      _$_LoadingStateButtonState;
+
+  Color? get color;
+  @JsonKey(ignore: true)
+  _$$_LoadingStateButtonStateCopyWith<_$_LoadingStateButtonState>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -417,7 +450,7 @@ class _$_SuccessStateButtonState implements _SuccessStateButtonState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Widget child) base,
-    required TResult Function() loading,
+    required TResult Function(Color? color) loading,
     required TResult Function(Widget child) success,
     required TResult Function(String message) failed,
   }) {
@@ -428,7 +461,7 @@ class _$_SuccessStateButtonState implements _SuccessStateButtonState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Widget child)? base,
-    TResult? Function()? loading,
+    TResult? Function(Color? color)? loading,
     TResult? Function(Widget child)? success,
     TResult? Function(String message)? failed,
   }) {
@@ -439,7 +472,7 @@ class _$_SuccessStateButtonState implements _SuccessStateButtonState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Widget child)? base,
-    TResult Function()? loading,
+    TResult Function(Color? color)? loading,
     TResult Function(Widget child)? success,
     TResult Function(String message)? failed,
     required TResult orElse(),
@@ -564,7 +597,7 @@ class _$_FailedStateButtonState implements _FailedStateButtonState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Widget child) base,
-    required TResult Function() loading,
+    required TResult Function(Color? color) loading,
     required TResult Function(Widget child) success,
     required TResult Function(String message) failed,
   }) {
@@ -575,7 +608,7 @@ class _$_FailedStateButtonState implements _FailedStateButtonState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Widget child)? base,
-    TResult? Function()? loading,
+    TResult? Function(Color? color)? loading,
     TResult? Function(Widget child)? success,
     TResult? Function(String message)? failed,
   }) {
@@ -586,7 +619,7 @@ class _$_FailedStateButtonState implements _FailedStateButtonState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Widget child)? base,
-    TResult Function()? loading,
+    TResult Function(Color? color)? loading,
     TResult Function(Widget child)? success,
     TResult Function(String message)? failed,
     required TResult orElse(),

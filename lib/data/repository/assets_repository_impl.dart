@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:web3dart/web3dart.dart';
 
+import '../../core/const.dart';
+import '../../core/di/di.dart';
 import '../../domain/assets/entity/asset_entity.dart';
 import '../../core/error/failure.dart';
 import '../../domain/assets/repository/assets_repository.dart';
@@ -9,11 +14,15 @@ import '../converter/asset_entity_converter.dart';
 import '../converter/asset_model_converter.dart';
 import '../service/assets_service.dart';
 import '../service/auth_service.dart';
+import '../service/file_service.dart';
 
 @LazySingleton(as: AssetsRepository)
 class AssetsRepositoryImpl extends AssetsRepository {
   final AuthService authService;
   final AssetsService assetsService;
+  final FilesService filesService;
+
+  final DeployedContract contract;
 
   final AssetModelConverter assetModelConverter;
   final AssetEntityConverter assetEntityConverter;
@@ -21,14 +30,40 @@ class AssetsRepositoryImpl extends AssetsRepository {
   AssetsRepositoryImpl({
     required this.authService,
     required this.assetsService,
+    required this.filesService,
+    required this.contract,
     required this.assetModelConverter,
     required this.assetEntityConverter,
   });
 
   @override
-  Future<Either<Failure, void>> createAsset(AssetEntity asset) async {
+  Future<Either<Failure, void>> createAsset({
+    File? coverFile,
+    required List<({File? file, String? url})> images,
+    required String link,
+    required AssetEntity modifiedAsset,
+  }) async {
     try {
-      await assetsService.createAsset(assetModelConverter.convert(asset));
+      final newAsset = await _prepareAsset(
+        coverFile: coverFile,
+        images: images,
+        modifiedAsset: modifiedAsset,
+      );
+      final assetId = await assetsService.createAsset(assetModelConverter.convert(newAsset));
+
+      try {
+        await authService.sendTransaction(
+          Transaction.callContract(
+            contract: contract,
+            function: contract.function('createAsset'),
+            parameters: [assetId, link, BigInt.from(modifiedAsset.price * weiInEth)],
+          ),
+        );
+      } catch (_) {
+        await assetsService.removeAsset(assetId);
+        return Left(UnknownFailure());
+      }
+
       return const Right(null);
     } catch (_) {
       return Left(UnknownFailure());
@@ -36,13 +71,47 @@ class AssetsRepositoryImpl extends AssetsRepository {
   }
 
   @override
-  Future<Either<Failure, void>> editAsset(AssetEntity asset) async {
+  Future<Either<Failure, void>> editAsset({
+    File? coverFile,
+    required List<({File? file, String? url})> images,
+    required AssetEntity modifiedAsset,
+  }) async {
     try {
-      await assetsService.editAsset(assetModelConverter.convert(asset));
+      final newAsset = await _prepareAsset(
+        coverFile: coverFile,
+        images: images,
+        modifiedAsset: modifiedAsset,
+      );
+
+      await assetsService.editAsset(assetModelConverter.convert(newAsset));
       return const Right(null);
     } catch (_) {
       return Left(UnknownFailure());
     }
+  }
+
+  Future<AssetEntity> _prepareAsset({
+    File? coverFile,
+    required List<({File? file, String? url})> images,
+    required AssetEntity modifiedAsset,
+  }) async {
+    AssetEntity newAsset = modifiedAsset.copyWith();
+    if (coverFile != null) {
+      newAsset = newAsset.copyWith(coverUrl: await filesService.uploadFile(coverFile));
+    }
+
+    final newImageUrls = <String>[];
+    for (int i = 0; i < images.length; i++) {
+      final image = images[i];
+
+      if (image.file != null) {
+        newImageUrls.add(await filesService.uploadFile(image.file!));
+      } else if (image.url != null) {
+        newImageUrls.add(image.url!);
+      }
+    }
+
+    return newAsset.copyWith(imageUrls: newImageUrls);
   }
 
   @override
@@ -99,6 +168,16 @@ class AssetsRepositoryImpl extends AssetsRepository {
       }
 
       await assetsService.toogleFavorite(address, assetId);
+      return const Right(null);
+    } catch (_) {
+      return Left(UnknownFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> changeRating({required AssetEntity asset, required double rating}) async {
+    try {
+      await assetsService.changeRating(asset: assetModelConverter.convert(asset), rating: rating);
       return const Right(null);
     } catch (_) {
       return Left(UnknownFailure());

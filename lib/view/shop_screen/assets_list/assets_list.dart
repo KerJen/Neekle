@@ -11,6 +11,7 @@ import '../../../core/ui/router/router.dart';
 import '../../../core/ui/text_styles.dart';
 import '../../../domain/assets/entity/asset_entity.dart';
 import '../../common/asset_card.dart';
+import '../../common/empty_placeholder.dart';
 import 'cubit/cubit.dart';
 
 const int assetsPageSize = 10;
@@ -47,6 +48,7 @@ class _AssetsListState extends State<AssetsList> with AutomaticKeepAliveClientMi
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocProvider(
       create: (context) => _cubit,
       child: BlocListener<AssetsListCubit, AssetsListState>(
@@ -96,20 +98,9 @@ class _AssetsListState extends State<AssetsList> with AutomaticKeepAliveClientMi
                 height: 32,
                 width: 32,
               ),
-              noItemsFoundIndicatorBuilder: (context) => Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.list_alt,
-                    size: 64,
-                    color: currentColorScheme(context).onSurface,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No assets here... yet :)',
-                    style: larger.copyWith(fontWeight: FontWeight.bold),
-                  )
-                ],
+              noItemsFoundIndicatorBuilder: (context) => const EmptyPlaceholder(
+                icon: Icons.list_alt,
+                title: 'No assets here... yet :)',
               ),
               itemBuilder: (context, item, index) {
                 return FadeInDown(

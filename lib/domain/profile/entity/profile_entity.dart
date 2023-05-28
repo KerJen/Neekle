@@ -10,5 +10,6 @@ class ProfileEntity with _$ProfileEntity {
     required String address,
     required double balance,
     required List<AssetEntity> showcase,
+    required List<({String? link, AssetEntity asset})> purchases,
   }) = _ProfileEntity;
 }

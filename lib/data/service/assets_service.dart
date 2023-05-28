@@ -1,38 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
-import '../../core/error/failure.dart';
 import '../model/asset/asset_model.dart';
 
 abstract class AssetsService {
-  Future<void> createAsset(AssetModel model);
-
+  Future<String> createAsset(AssetModel model);
   Future<void> editAsset(AssetModel model);
-
+  Future<void> removeAsset(String assetId);
   Stream<AssetModel?> asset(String assetId);
-
   Future<List<AssetModel>> getFavoriteAssets({
     required String address,
     required String? lastAssetId,
     required int limit,
   });
-
   Future<List<AssetModel>> getCategoryAssets(
     String category, {
     required String? lastAssetId,
     required int limit,
     bool force = false,
   });
-
-  Stream<bool> isFavorite(String address, String assetId);
-
-  Future<void> toogleFavorite(String address, String assetId);
-
   Stream<List<AssetModel>> showcase(String address);
+  Stream<List<({String? link, AssetModel asset})>> purchases(String address);
+  Stream<bool> isFavorite(String address, String assetId);
+  Future<void> toogleFavorite(String address, String assetId);
+  Future<void> changeRating({required AssetModel asset, required double rating});
 }
 
 @LazySingleton(as: AssetsService)
@@ -48,13 +42,20 @@ class AssetsServiceImpl extends AssetsService {
   });
 
   @override
-  Future<void> createAsset(AssetModel model) async {
-    await store.collection('assets').add(model.toJson());
+  Future<String> createAsset(AssetModel model) async {
+    final assetId = (await store.collection('assets').add(model.toJson())).id;
+    await store.collection('assets').doc(assetId).update({'id': assetId});
+    return assetId;
   }
 
   @override
   Future<void> editAsset(AssetModel model) async {
-    await store.collection('assets').doc().update(model.toJson());
+    await store.collection('assets').doc(model.id).update(model.toJson());
+  }
+
+  @override
+  Future<void> removeAsset(String assetId) async {
+    await store.collection('assets').doc(assetId).delete();
   }
 
   @override
@@ -132,18 +133,20 @@ class AssetsServiceImpl extends AssetsService {
 
   @override
   Stream<List<AssetModel>> showcase(String address) {
+    const eventName = 'AssetCreated';
+
     final filter = FilterOptions(
       fromBlock: const BlockNum.genesis(),
       address: contract.address,
       topics: [
-        [bytesToHex(contract.event('AssetCreated').signature, padToEvenLength: true, include0x: true)],
+        [bytesToHex(contract.event(eventName).signature, padToEvenLength: true, include0x: true)],
         [bytesToHex(EthereumAddress.fromHex(address).addressBytes, forcePadLength: 64, include0x: true)],
       ],
     );
 
     return web3.events(filter).scan<List<String>>(
       (accumulated, event, index) {
-        final results = contract.event('AssetCreated').decodeResults(event.topics!, event.data!);
+        final results = contract.event(eventName).decodeResults(event.topics!, event.data!);
 
         if (results.isNotEmpty && results.first is String) {
           final assetId = results.first as String;
@@ -153,17 +156,66 @@ class AssetsServiceImpl extends AssetsService {
         return accumulated;
       },
       [],
-    ).startWith([]).asyncMap((ids) async {
+    ).startWith([]).switchMap((ids) {
       if (ids.isEmpty) {
-        return [];
+        return Stream.value([]);
+      }
+      return store
+          .collection('assets')
+          .where(FieldPath.documentId, whereIn: ids)
+          .snapshots()
+          .map((query) => query.docs.map((doc) => AssetModel.fromJson(doc.data())).toList(growable: false));
+    });
+  }
+
+  @override
+  Stream<List<({String? link, AssetModel asset})>> purchases(String address) {
+    const eventName = 'AssetSold';
+
+    final filter = FilterOptions(
+      fromBlock: const BlockNum.genesis(),
+      address: contract.address,
+      topics: [
+        [bytesToHex(contract.event(eventName).signature, padToEvenLength: true, include0x: true)],
+        [],
+        [bytesToHex(EthereumAddress.fromHex(address).addressBytes, forcePadLength: 64, include0x: true)],
+      ],
+    );
+
+    return web3.events(filter).scan<List<({String id, String link})>>(
+      (accumulated, event, index) {
+        final results = contract.event(eventName).decodeResults(event.topics!, event.data!);
+
+        if (results.isNotEmpty && results.first is String && results[3] is String) {
+          final assetId = results.first as String;
+          return [...accumulated, (id: assetId, link: results[3])];
+        }
+
+        return accumulated;
+      },
+      [],
+    ).startWith([]).switchMap((results) {
+      if (results.isEmpty) {
+        return Stream.value([]);
       }
 
-      try {
-        final modelsQuery = store.collection('assets').where(FieldPath.documentId, whereIn: ids);
-        return (await modelsQuery.get()).docs.map((doc) => AssetModel.fromJson(doc.data())).toList();
-      } catch (_) {
-        return [];
-      }
+      return store
+          .collection('assets')
+          .where(FieldPath.documentId, whereIn: results.map((result) => result.id))
+          .snapshots()
+          .map(
+            (query) => query.docs.map(
+              (doc) {
+                final linkIndex = results.indexWhere((element) => element.id == doc.id);
+                return (link: linkIndex != -1 ? results[linkIndex].link : null, asset: AssetModel.fromJson(doc.data()));
+              },
+            ).toList(growable: false),
+          );
     });
+  }
+
+  @override
+  Future<void> changeRating({required AssetModel asset, required double rating}) async {
+    await store.collection('assets').doc(asset.id).update(asset.copyWith(rating: rating).toJson());
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
@@ -46,14 +44,18 @@ class ProfileRepositoryImpl extends ProfileRepository {
         return Stream.value(null);
       }
 
-      return Rx.combineLatest2(
+      return Rx.combineLatest3(
         Stream.fromFuture(statisticsService.getBalance(user.uid)),
         assetsService.showcase(user.uid),
-        (balance, showcase) {
+        assetsService.purchases(user.uid),
+        (balance, showcase, purchases) {
           return ProfileEntity(
             address: user.uid,
             balance: balance,
             showcase: showcase.map((model) => assetEntityConverter.convert(model)).toList(growable: false),
+            purchases: purchases
+                .map((purchase) => (link: purchase.link, asset: assetEntityConverter.convert(purchase.asset)))
+                .toList(growable: false),
           );
         },
       );

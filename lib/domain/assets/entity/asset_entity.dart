@@ -15,4 +15,16 @@ class AssetEntity with _$AssetEntity {
     required List<String> tags,
     required double? rating,
   }) = _AssetEntity;
+
+  factory AssetEntity.empty() => const AssetEntity(
+        id: '',
+        coverUrl: '',
+        title: '',
+        description: '_descriptionController.text',
+        price: 0,
+        imageUrls: [],
+        category: '',
+        tags: [],
+        rating: null,
+      );
 }

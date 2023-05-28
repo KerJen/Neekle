@@ -10,6 +10,7 @@ import '../../core/ui/kit/loading_indicator.dart';
 import '../../core/ui/text_styles.dart';
 import '../qr_sheet/qr_sheet.dart';
 import 'cubit/cubit.dart';
+import 'purchased_assets_sheet/purchased_assets_sheet.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -44,28 +45,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             body: SingleChildScrollView(
-              padding: const EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 16,
-              ),
+              padding: const EdgeInsets.only(top: 16),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    child: state.mapOrNull(
-                          loading: (_) => const _ConnectWalletLoading(),
-                          profile: (value) {
-                            if (value.profile != null) {
-                              return _Wallet(balance: value.profile!.balance);
-                            }
-                            return null;
-                          },
-                        ) ??
-                        _ConnectWallet(
-                          onConnect: () async => QrSheet.show(context),
-                        ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      child: state.mapOrNull(
+                            loading: (_) => const _ConnectWalletLoading(),
+                            profile: (value) {
+                              if (value.profile != null) {
+                                return _Wallet(balance: value.profile!.balance);
+                              }
+                              return null;
+                            },
+                          ) ??
+                          _ConnectWallet(
+                            onConnect: () async => QrSheet.show(context),
+                          ),
+                    ),
                   ),
+                  state.mapOrNull(
+                        profile: (value) {
+                          if (value.profile != null) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 32),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  child: Text(
+                                    'General',
+                                    style: title.copyWith(color: currentColorScheme(context).onBackground),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                ListTile(
+                                  onTap: () async {
+                                    PurchasedAssetsSheet.show(context);
+                                  },
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                                  leading: Container(
+                                    height: 48,
+                                    width: 48,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: currentColorScheme(context).secondaryContainer,
+                                    ),
+                                    child: Icon(
+                                      Icons.shopping_cart_outlined,
+                                      size: 22,
+                                      color: currentColorScheme(context).primary,
+                                    ),
+                                  ),
+                                  title: Text(
+                                    'Your purchases',
+                                    style: large.copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                  trailing: Icon(
+                                    Icons.keyboard_arrow_right,
+                                    color: currentColorScheme(context).onBackground,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                          return null;
+                        },
+                      ) ??
+                      const SizedBox.shrink()
                 ],
               ),
             ),

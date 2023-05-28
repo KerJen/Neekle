@@ -19,6 +19,8 @@ mixin _$ProfileEntity {
   String get address => throw _privateConstructorUsedError;
   double get balance => throw _privateConstructorUsedError;
   List<AssetEntity> get showcase => throw _privateConstructorUsedError;
+  List<({AssetEntity asset, String? link})> get purchases =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProfileEntityCopyWith<ProfileEntity> get copyWith =>
@@ -31,7 +33,11 @@ abstract class $ProfileEntityCopyWith<$Res> {
           ProfileEntity value, $Res Function(ProfileEntity) then) =
       _$ProfileEntityCopyWithImpl<$Res, ProfileEntity>;
   @useResult
-  $Res call({String address, double balance, List<AssetEntity> showcase});
+  $Res call(
+      {String address,
+      double balance,
+      List<AssetEntity> showcase,
+      List<({AssetEntity asset, String? link})> purchases});
 }
 
 /// @nodoc
@@ -50,6 +56,7 @@ class _$ProfileEntityCopyWithImpl<$Res, $Val extends ProfileEntity>
     Object? address = null,
     Object? balance = null,
     Object? showcase = null,
+    Object? purchases = null,
   }) {
     return _then(_value.copyWith(
       address: null == address
@@ -64,6 +71,10 @@ class _$ProfileEntityCopyWithImpl<$Res, $Val extends ProfileEntity>
           ? _value.showcase
           : showcase // ignore: cast_nullable_to_non_nullable
               as List<AssetEntity>,
+      purchases: null == purchases
+          ? _value.purchases
+          : purchases // ignore: cast_nullable_to_non_nullable
+              as List<({AssetEntity asset, String? link})>,
     ) as $Val);
   }
 }
@@ -76,7 +87,11 @@ abstract class _$$_ProfileEntityCopyWith<$Res>
       __$$_ProfileEntityCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String address, double balance, List<AssetEntity> showcase});
+  $Res call(
+      {String address,
+      double balance,
+      List<AssetEntity> showcase,
+      List<({AssetEntity asset, String? link})> purchases});
 }
 
 /// @nodoc
@@ -93,6 +108,7 @@ class __$$_ProfileEntityCopyWithImpl<$Res>
     Object? address = null,
     Object? balance = null,
     Object? showcase = null,
+    Object? purchases = null,
   }) {
     return _then(_$_ProfileEntity(
       address: null == address
@@ -107,6 +123,10 @@ class __$$_ProfileEntityCopyWithImpl<$Res>
           ? _value._showcase
           : showcase // ignore: cast_nullable_to_non_nullable
               as List<AssetEntity>,
+      purchases: null == purchases
+          ? _value._purchases
+          : purchases // ignore: cast_nullable_to_non_nullable
+              as List<({AssetEntity asset, String? link})>,
     ));
   }
 }
@@ -117,8 +137,10 @@ class _$_ProfileEntity implements _ProfileEntity {
   const _$_ProfileEntity(
       {required this.address,
       required this.balance,
-      required final List<AssetEntity> showcase})
-      : _showcase = showcase;
+      required final List<AssetEntity> showcase,
+      required final List<({AssetEntity asset, String? link})> purchases})
+      : _showcase = showcase,
+        _purchases = purchases;
 
   @override
   final String address;
@@ -132,9 +154,17 @@ class _$_ProfileEntity implements _ProfileEntity {
     return EqualUnmodifiableListView(_showcase);
   }
 
+  final List<({AssetEntity asset, String? link})> _purchases;
+  @override
+  List<({AssetEntity asset, String? link})> get purchases {
+    if (_purchases is EqualUnmodifiableListView) return _purchases;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_purchases);
+  }
+
   @override
   String toString() {
-    return 'ProfileEntity(address: $address, balance: $balance, showcase: $showcase)';
+    return 'ProfileEntity(address: $address, balance: $balance, showcase: $showcase, purchases: $purchases)';
   }
 
   @override
@@ -144,12 +174,18 @@ class _$_ProfileEntity implements _ProfileEntity {
             other is _$_ProfileEntity &&
             (identical(other.address, address) || other.address == address) &&
             (identical(other.balance, balance) || other.balance == balance) &&
-            const DeepCollectionEquality().equals(other._showcase, _showcase));
+            const DeepCollectionEquality().equals(other._showcase, _showcase) &&
+            const DeepCollectionEquality()
+                .equals(other._purchases, _purchases));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, address, balance,
-      const DeepCollectionEquality().hash(_showcase));
+  int get hashCode => Object.hash(
+      runtimeType,
+      address,
+      balance,
+      const DeepCollectionEquality().hash(_showcase),
+      const DeepCollectionEquality().hash(_purchases));
 
   @JsonKey(ignore: true)
   @override
@@ -160,9 +196,11 @@ class _$_ProfileEntity implements _ProfileEntity {
 
 abstract class _ProfileEntity implements ProfileEntity {
   const factory _ProfileEntity(
-      {required final String address,
-      required final double balance,
-      required final List<AssetEntity> showcase}) = _$_ProfileEntity;
+          {required final String address,
+          required final double balance,
+          required final List<AssetEntity> showcase,
+          required final List<({AssetEntity asset, String? link})> purchases}) =
+      _$_ProfileEntity;
 
   @override
   String get address;
@@ -170,6 +208,8 @@ abstract class _ProfileEntity implements ProfileEntity {
   double get balance;
   @override
   List<AssetEntity> get showcase;
+  @override
+  List<({AssetEntity asset, String? link})> get purchases;
   @override
   @JsonKey(ignore: true)
   _$$_ProfileEntityCopyWith<_$_ProfileEntity> get copyWith =>

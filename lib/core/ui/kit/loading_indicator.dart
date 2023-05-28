@@ -5,11 +5,13 @@ import '../colors.dart';
 class LoadingIndicator extends StatelessWidget {
   final double height;
   final double width;
+  final Color? color;
 
   const LoadingIndicator({
     super.key,
     this.height = 24,
     this.width = 24,
+    this.color,
   });
 
   @override
@@ -20,7 +22,7 @@ class LoadingIndicator extends StatelessWidget {
         width: width,
         child: CircularProgressIndicator(
           strokeWidth: 2,
-          color: currentColorScheme(context).onSurface,
+          color: color ?? currentColorScheme(context).onSurface,
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:walletconnect_dart/walletconnect_dart.dart';
+import 'package:walletconnect_secure_storage/walletconnect_secure_storage.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/io.dart';
@@ -9,9 +10,12 @@ import '../../core/const.dart';
 
 @module
 abstract class Web3Module {
+  @preResolve
   @lazySingleton
-  WalletConnect get walletConnector => WalletConnect(
+  Future<WalletConnect> get walletConnector async => WalletConnect(
         bridge: 'https://bridge.walletconnect.org',
+        session: await WalletConnectSecureStorage().getSession(),
+        sessionStorage: WalletConnectSecureStorage(),
         clientMeta: const PeerMeta(
           name: 'Neekle',
           description: 'Neekle',
@@ -27,8 +31,9 @@ abstract class Web3Module {
       );
 
   @preResolve
+  @lazySingleton
   Future<DeployedContract> get contract async => DeployedContract(
         ContractAbi.fromJson(await rootBundle.loadString('assets/strings/abi.json'), 'DigitalAssetsMarketplace'),
-        EthereumAddress.fromHex('0xb9fCDd9B12447f850984DC7DEC6914Bd7a495e5b'),
+        EthereumAddress.fromHex(contractAddress),
       );
 }

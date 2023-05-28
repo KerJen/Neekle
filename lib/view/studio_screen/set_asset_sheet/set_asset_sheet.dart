@@ -1,17 +1,23 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
+import '../../../core/const.dart';
+import '../../../core/di/di.dart';
 import '../../../core/helper/sheet_helper.dart';
 import '../../../core/ui/colors.dart';
 import '../../../core/ui/kit/bouncing_gesture_detector.dart';
-import '../../../core/ui/kit/button.dart';
 import '../../../core/ui/kit/image.dart';
+import '../../../core/ui/kit/state_button/state_button.dart';
 import '../../../core/ui/kit/tags.dart';
 import '../../../core/ui/text_styles.dart';
 import '../../../domain/assets/entity/asset_entity.dart';
+import 'cubit/cubit.dart';
 
 class SetAssetSheet extends StatefulWidget {
   final AssetEntity? asset;
@@ -60,257 +66,331 @@ class _SetAssetSheetState extends State<SetAssetSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: Container(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        constraints: BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height * 0.4,
-          maxHeight: MediaQuery.of(context).size.height * 0.85,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        widget.asset != null ? 'Edit asset' : 'Create asset',
-                        style: title.copyWith(color: currentColorScheme(context).onBackground),
-                      ),
-                    ),
-                    BouncingGestureDetector(
-                      onTap: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          'Preview',
-                          style: large.copyWith(
-                            color: currentColorScheme(context).primary,
-                            fontWeight: FontWeight.w600,
+    return BlocProvider(
+      create: (context) => getIt.get<SetAssetCubit>(),
+      child: BlocListener<SetAssetCubit, SetAssetState>(
+        listener: (context, state) async {
+          state.mapOrNull(
+            set: (value) async {
+              Future.delayed(const Duration(milliseconds: 500), () {
+                context.router.pop();
+              });
+            },
+          );
+        },
+        child: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Container(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height * 0.4,
+              maxHeight: MediaQuery.of(context).size.height * 0.85,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            widget.asset != null ? 'Edit asset' : 'Create asset',
+                            style: title.copyWith(color: currentColorScheme(context).onBackground),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        _AssetImage(
-                          height: 64,
-                          width: 64,
-                          image: _cover,
-                          onChange: (file) async {
-                            setState(() {
-                              _cover = (file: file, url: _cover.url);
-                            });
-                          },
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextField(
-                            controller: _titleController,
-                            decoration: const InputDecoration(
-                              hintText: 'Title',
+                        BouncingGestureDetector(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Text(
+                              'Preview',
+                              style: large.copyWith(
+                                color: currentColorScheme(context).primary,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _descriptionController,
-                      decoration: const InputDecoration(hintText: 'Description'),
-                      maxLines: 3,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 32),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Images',
-                  style: large.copyWith(
-                    color: currentColorScheme(context).onBackground,
-                    fontWeight: FontWeight.w600,
                   ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 96,
-                child: ListView.separated(
-                  itemCount: _images.length + 1,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return _AssetImage(
-                        height: 96,
-                        width: 96,
-                        image: (file: null, url: null),
-                        onChange: (file) {
-                          setState(() {
-                            _images.add((file: file, url: null));
-                          });
-                        },
-                      );
-                    }
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            _AssetImage(
+                              height: 64,
+                              width: 64,
+                              image: _cover,
+                              onChange: (file) async {
+                                setState(() {
+                                  _cover = (file: file, url: _cover.url);
+                                });
+                              },
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: TextField(
+                                controller: _titleController,
+                                decoration: const InputDecoration(
+                                  hintText: 'Title',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _descriptionController,
+                          decoration: const InputDecoration(hintText: 'Description'),
+                          maxLines: 3,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'Images',
+                      style: large.copyWith(
+                        color: currentColorScheme(context).onBackground,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    height: 96,
+                    child: ListView.separated(
+                      itemCount: _images.length + 1,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        if (index == 0) {
+                          return _AssetImage(
+                            height: 96,
+                            width: 96,
+                            image: (file: null, url: null),
+                            onChange: (file) {
+                              setState(() {
+                                _images.add((file: file, url: null));
+                              });
+                            },
+                          );
+                        }
 
-                    return _AssetImage(
-                      height: 96,
-                      width: 96,
-                      image: _images[index - 1],
-                      onChange: (file) {
-                        setState(() {
-                          _images[index - 1] = (file: file, url: _images[index - 1].url);
-                        });
+                        return _AssetImage(
+                          height: 96,
+                          width: 96,
+                          image: _images[index - 1],
+                          onChange: (file) {
+                            setState(() {
+                              _images[index - 1] = (file: file, url: _images[index - 1].url);
+                            });
+                          },
+                          onRemove: () {
+                            setState(() {
+                              _images.removeAt(index - 1);
+                            });
+                          },
+                        );
                       },
-                      onRemove: () {
-                        setState(() {
-                          _images.removeAt(index - 1);
-                        });
-                      },
-                    );
-                  },
-                  separatorBuilder: (context, index) => const SizedBox(width: 16),
-                ),
-              ),
-              const SizedBox(height: 32),
-              if (widget.asset == null) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Link',
-                        style: large.copyWith(
-                          color: currentColorScheme(context).onBackground,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text('You can\'t change it later'),
-                      const SizedBox(height: 16),
-                      TextField(
-                        controller: _linkController,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.add_link),
-                          hintText: 'Link',
-                        ),
-                      ),
-                    ],
+                      separatorBuilder: (context, index) => const SizedBox(width: 16),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 32),
-              ],
-              if (widget.asset == null) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Price',
-                        style: large.copyWith(
-                          color: currentColorScheme(context).onBackground,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text('You can\'t change it later'),
-                      const SizedBox(height: 16),
-                      TextField(
-                        controller: _priceController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.currency_ruble),
-                          hintText: 'Price',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 32),
-              ],
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Category',
-                      style: large.copyWith(
-                        color: currentColorScheme(context).onBackground,
-                        fontWeight: FontWeight.w600,
+                  const SizedBox(height: 32),
+                  if (widget.asset == null) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Link',
+                            style: large.copyWith(
+                              color: currentColorScheme(context).onBackground,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text('You can\'t change it later'),
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: _linkController,
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.add_link),
+                              hintText: 'Link',
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const Text('Category is a list of assets you can choose in the feed'),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _categoryTextController,
-                      decoration: const InputDecoration(
-                        hintText: 'Category',
-                      ),
-                    ),
+                    const SizedBox(height: 32),
                   ],
-                ),
-              ),
-              const SizedBox(height: 32),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Tags',
-                      style: large.copyWith(
-                        color: currentColorScheme(context).onBackground,
-                        fontWeight: FontWeight.w600,
+                  if (widget.asset == null) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Price',
+                            style: large.copyWith(
+                              color: currentColorScheme(context).onBackground,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text('You can\'t change it later'),
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: _priceController,
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            decoration: InputDecoration(
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: SvgPicture.asset(
+                                  ethereumIcon,
+                                  color: currentColorScheme(context).onSurface,
+                                ),
+                              ),
+                              hintText: 'Price',
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    _TagsTextField(
-                      availableGenres: ['test', 'hello', 'heelll', 'heehl'],
-                      genres: _tags,
-                      onChanged: (genres) {},
-                      onRemoved: (index) {},
-                    ),
+                    const SizedBox(height: 32),
                   ],
-                ),
-              ),
-              const SizedBox(height: 32),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: AppButton(
-                  height: 42,
-                  borderRadius: BorderRadius.circular(21),
-                  alignment: Alignment.center,
-                  child: Text(
-                    widget.asset != null ? 'Edit' : 'Create',
-                    style: medium.copyWith(color: currentColorScheme(context).primary),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Category',
+                          style: large.copyWith(
+                            color: currentColorScheme(context).onBackground,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text('Category is a list of assets you can choose in the feed'),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _categoryTextController,
+                          decoration: const InputDecoration(
+                            hintText: 'Category',
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 32),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Tags',
+                          style: large.copyWith(
+                            color: currentColorScheme(context).onBackground,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _TagsTextField(
+                          availableGenres: ['test', 'hello', 'heelll', 'heehl'],
+                          genres: _tags,
+                          onChanged: (genres) {
+                            setState(() {
+                              _tags = genres;
+                            });
+                          },
+                          onRemoved: (index) {
+                            setState(() {
+                              _tags.removeAt(index);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  BlocBuilder<SetAssetCubit, SetAssetState>(
+                    builder: (context, state) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: StateButton(
+                          height: 42,
+                          color: currentColorScheme(context).secondaryContainer,
+                          onPressed: () async {
+                            final modifiedAsset = widget.asset ?? AssetEntity.empty();
+
+                            AssetEntity asset = modifiedAsset.copyWith(
+                              title: _titleController.text,
+                              description: _descriptionController.text,
+                              category: _categoryTextController.text,
+                              tags: _tags,
+                            );
+
+                            if (widget.asset != null) {
+                              context.read<SetAssetCubit>().editAsset(
+                                    coverFile: _cover.file,
+                                    images: _images,
+                                    modifiedAsset: asset,
+                                  );
+                            } else {
+                              asset = asset.copyWith(
+                                price: double.parse(_priceController.text.replaceFirst(',', '.')),
+                              );
+
+                              context.read<SetAssetCubit>().createAsset(
+                                    coverFile: _cover.file,
+                                    images: _images,
+                                    link: _linkController.text,
+                                    modifiedAsset: asset,
+                                  );
+                            }
+                          },
+                          state: state.maybeMap(loading: (value) {
+                            return StateButtonState.loading(color: currentColorScheme(context).onBackground);
+                          }, set: (value) {
+                            return StateButtonState.success(
+                              child: Icon(
+                                Icons.done,
+                                color: currentColorScheme(context).primary,
+                              ),
+                            );
+                          }, failure: (value) {
+                            return const StateButtonState.failed(message: 'Error');
+                          }, orElse: () {
+                            return StateButtonState.base(
+                              child: Text(
+                                widget.asset != null ? 'Save' : 'Create',
+                                style: medium.copyWith(color: currentColorScheme(context).primary),
+                              ),
+                            );
+                          }),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 32),
+                ],
               ),
-              const SizedBox(height: 32),
-            ],
+            ),
           ),
         ),
       ),
@@ -404,6 +484,8 @@ class _AssetImage extends StatelessWidget {
     if (result != null) {
       onChange(File(result.files.single.path!));
     }
+
+    return null;
   }
 }
 

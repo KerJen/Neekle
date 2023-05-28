@@ -113,10 +113,13 @@ class AssetCard extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              RatingStars(
-                                rating: asset.rating ?? 0.0,
-                                itemSize: 16,
-                              ),
+                              if (asset.rating != null)
+                                RatingStars(
+                                  rating: asset.rating!,
+                                  itemSize: 16,
+                                )
+                              else
+                                const SizedBox.shrink(),
                               if (onShopcartStateChanged != null)
                                 AppButton(
                                   height: 28,

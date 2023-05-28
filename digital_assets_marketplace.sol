@@ -13,12 +13,27 @@ contract DigitalAssetsMarketplace is ERC721 {
 
     mapping(string => Asset) public assets;
 
-    event AssetCreated(string assetId, address indexed seller, string assetLink, uint256 price);
-    event AssetSold(string assetId, address indexed seller, address indexed buyer, uint256 price);
+    event AssetCreated(
+        string assetId,
+        address indexed seller,
+        string assetLink,
+        uint256 price
+    );
+    event AssetSold(
+        string assetId,
+        address indexed seller,
+        address indexed buyer,
+        string assetLink,
+        uint256 price
+    );
 
     constructor() ERC721("DigitalAssetsMarketplace", "DAM") {}
 
-    function createAsset(string memory assetId, string memory assetLink, uint256 price) public {
+    function createAsset(
+        string memory assetId,
+        string memory assetLink,
+        uint256 price
+    ) public {
         uint256 assetUintId = uint256(keccak256(abi.encodePacked(assetId)));
         require(!_exists(assetUintId), "Asset already exists");
         _mint(msg.sender, assetUintId);
@@ -28,17 +43,31 @@ contract DigitalAssetsMarketplace is ERC721 {
         emit AssetCreated(assetId, msg.sender, assetLink, price);
     }
 
-    function buyAsset(string memory assetId) public payable {
-        Asset memory asset = assets[assetId];
-        require(msg.value >= asset.price, "Insufficient funds to purchase asset");
+    function buyAssets(string[] memory assetIds) public payable {
+        uint256 totalCost = 0;
+        for (uint256 i = 0; i < assetIds.length; i++) {
+            Asset memory asset = assets[assetIds[i]];
+            totalCost += asset.price;
+        }
 
-        // Transfer the asset to the buyer
-        uint256 assetUintId = uint256(keccak256(abi.encodePacked(assetId)));
-        _transfer(asset.seller, msg.sender, assetUintId);
+        require(
+            msg.value >= totalCost,
+            "Insufficient funds to purchase assets"
+        );
 
-        // Pay the seller
-        payable(asset.seller).transfer(asset.price);
+        for (uint256 i = 0; i < assetIds.length; i++) {
+            Asset memory asset = assets[assetIds[i]];
+            uint256 assetUintId = uint256(
+                keccak256(abi.encodePacked(assetIds[i]))
+            );
 
-        emit AssetSold(assetId, asset.seller, msg.sender, asset.price);
+            // Transfer the asset to the buyer
+            _transfer(asset.seller, msg.sender, assetUintId);
+
+            // Pay the seller
+            payable(asset.seller).transfer(asset.price);
+
+            emit AssetSold(assetIds[i], asset.seller, msg.sender, asset.assetLink, asset.price);
+        }
     }
 }

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:isar/isar.dart';
 
 import '../../../../domain/assets/entity/asset_entity.dart';
 import '../../../../domain/shop/repository/shop_repository.dart';

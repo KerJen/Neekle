@@ -8,11 +8,10 @@ import '../loading_indicator.dart';
 
 part 'state_button.freezed.dart';
 
-
 @freezed
 class StateButtonState with _$StateButtonState {
   const factory StateButtonState.base({required Widget child}) = _BaseStateButtonState;
-  const factory StateButtonState.loading() = _LoadingStateButtonState;
+  const factory StateButtonState.loading({Color? color}) = _LoadingStateButtonState;
   const factory StateButtonState.success({@Default(Icon(Icons.done, color: Colors.white)) Widget child}) =
       _SuccessStateButtonState;
   const factory StateButtonState.failed({required String message}) = _FailedStateButtonState;
@@ -62,8 +61,12 @@ class StateButton extends StatelessWidget {
           duration: const Duration(milliseconds: 400),
           child: state.map(
             base: (state) => state.child,
-            loading: (_) {
-              return LoadingIndicator(height: height / 2, width: height / 2);
+            loading: (state) {
+              return LoadingIndicator(
+                height: height / 2,
+                width: height / 2,
+                color: state.color,
+              );
             },
             success: (state) {
               return state.child;

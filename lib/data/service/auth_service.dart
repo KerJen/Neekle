@@ -7,8 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:walletconnect_dart/walletconnect_dart.dart';
+import 'package:web3dart/web3dart.dart';
 
 import '../../core/error/exception.dart';
+import '../../core/web3/wallet_connect_credentials.dart';
 
 abstract class AuthService {
   Stream<SessionStatus> walletSessionStatus();
@@ -16,6 +18,7 @@ abstract class AuthService {
   Stream<User?> authStateChanges();
   Future<String> createSession();
   Future<Tuple2<String, String>> signSignInMessage(String address);
+  Future<String> sendTransaction(Transaction transaction);
   Future<UserCredential> logIn({required String address, required String message, required String signature});
   Future<void> logOut();
 }
@@ -23,11 +26,13 @@ abstract class AuthService {
 @LazySingleton(as: AuthService)
 class AuthServiceImpl extends AuthService {
   final WalletConnect walletConnector;
+  final Web3Client web3Client;
   final FirebaseAuth auth;
   final FirebaseFunctions functions;
 
   AuthServiceImpl({
     required this.walletConnector,
+    required this.web3Client,
     required this.auth,
     required this.functions,
   }) {
@@ -55,7 +60,7 @@ class AuthServiceImpl extends AuthService {
     }
 
     walletConnector.createSession(
-      chainId: 1,
+      chainId: (await web3Client.getChainId()).toInt(),
       onDisplayUri: (uri) => completer.complete(uri),
     );
     return completer.future;
@@ -74,6 +79,19 @@ class AuthServiceImpl extends AuthService {
   }
 
   @override
+  Future<String> sendTransaction(Transaction transaction) async {
+    final credentials = WalletConnectCredentials(
+      provider: EthereumWalletConnectProvider(walletConnector),
+    );
+
+    return await web3Client.sendTransaction(
+      credentials,
+      transaction,
+      chainId: (await web3Client.getChainId()).toInt(),
+    );
+  }
+
+  @override
   Future<UserCredential> logIn({
     required String address,
     required String message,
@@ -86,14 +104,17 @@ class AuthServiceImpl extends AuthService {
     });
 
     final token = result.data['customToken'] as String?;
-
     if (token == null) {
       throw UnauthorizedException();
     }
-    
+
     return await auth.signInWithCustomToken(token);
   }
 
   @override
-  Future<void> logOut() => auth.signOut();
+  Future<void> logOut() async {
+    await auth.signOut();
+    await walletConnector.killSession();
+    walletConnector.reconnect();
+  }
 }
