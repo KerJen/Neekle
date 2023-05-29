@@ -59,10 +59,7 @@ contract DigitalAssetsMarketplace is ERC721 {
             Asset memory asset = assets[assetIds[i]];
             uint256 assetUintId = uint256(
                 keccak256(abi.encodePacked(assetIds[i]))
-            );
-
-            // Transfer the asset to the buyer
-            _transfer(asset.seller, msg.sender, assetUintId);
+            ); 
 
             // Pay the seller
             payable(asset.seller).transfer(asset.price);
