@@ -104,19 +104,6 @@ class _SetAssetSheetState extends State<SetAssetSheet> {
                             style: title.copyWith(color: currentColorScheme(context).onBackground),
                           ),
                         ),
-                        BouncingGestureDetector(
-                          onTap: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: Text(
-                              'Preview',
-                              style: large.copyWith(
-                                color: currentColorScheme(context).primary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -311,7 +298,7 @@ class _SetAssetSheetState extends State<SetAssetSheet> {
                         ),
                         const SizedBox(height: 16),
                         _TagsTextField(
-                          availableGenres: ['test', 'hello', 'heelll', 'heehl'],
+                          availableGenres: ['Code', 'Theme', 'Plugin'],
                           genres: _tags,
                           onChanged: (genres) {
                             setState(() {

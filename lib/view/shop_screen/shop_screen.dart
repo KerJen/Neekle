@@ -22,62 +22,64 @@ class _ShopScreenState extends State<ShopScreen> with TickerProviderStateMixin {
     return BlocProvider(
       create: (context) => getIt.get<ShopCubit>(),
       child: Scaffold(
-        appBar: const _SearchAppBar(),
-        body: BlocBuilder<ShopCubit, ShopState>(
-          builder: (context, state) {
-            return state.maybeMap(
-              shop: (value) {
-                final tabController = TabController(
-                  length: shopCategories.length + (value.isAuthorized ? 1 : 0),
-                  vsync: this,
-                );
+        // appBar: const _SearchAppBar(),
+        body: SafeArea(
+          child: BlocBuilder<ShopCubit, ShopState>(
+            builder: (context, state) {
+              return state.maybeMap(
+                shop: (value) {
+                  final tabController = TabController(
+                    length: shopCategories.length + (value.isAuthorized ? 1 : 0),
+                    vsync: this,
+                  );
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-                    AnimatedBuilder(
-                      animation: tabController,
-                      builder: (context, _) {
-                        return TabBar(
-                          controller: tabController,
-                          isScrollable: true,
-                          dividerColor: Colors.transparent,
-                          labelStyle: medium,
-                          unselectedLabelColor: currentColorScheme(context).surface,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          labelPadding: const EdgeInsets.only(right: 12),
-                          tabs: [
-                            if (value.isAuthorized) _FavoriteTab(enabled: tabController.index == 0),
-                            for (int i = 0; i < shopCategories.length; i++)
-                              _AssetsCategory(
-                                enabled: tabController.index - (value.isAuthorized ? 1 : 0) == i,
-                                title: shopCategories[i],
-                              )
-                          ],
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child: TabBarView(
-                        controller: tabController,
-                        children: [
-                          if (value.isAuthorized) const AssetsList(),
-                          for (final category in shopCategories)
-                            AssetsList(
-                              key: ValueKey(category),
-                              category: category,
-                            ),
-                        ],
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      AnimatedBuilder(
+                        animation: tabController,
+                        builder: (context, _) {
+                          return TabBar(
+                            controller: tabController,
+                            isScrollable: true,
+                            dividerColor: Colors.transparent,
+                            labelStyle: medium,
+                            unselectedLabelColor: currentColorScheme(context).surface,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            labelPadding: const EdgeInsets.only(right: 12),
+                            tabs: [
+                              if (value.isAuthorized) _FavoriteTab(enabled: tabController.index == 0),
+                              for (int i = 0; i < shopCategories.length; i++)
+                                _AssetsCategory(
+                                  enabled: tabController.index - (value.isAuthorized ? 1 : 0) == i,
+                                  title: shopCategories[i],
+                                )
+                            ],
+                          );
+                        },
                       ),
-                    ),
-                  ],
-                );
-              },
-              orElse: () => const LoadingIndicator(),
-            );
-          },
+                      const SizedBox(height: 8),
+                      Expanded(
+                        child: TabBarView(
+                          controller: tabController,
+                          children: [
+                            if (value.isAuthorized) const AssetsList(),
+                            for (final category in shopCategories)
+                              AssetsList(
+                                key: ValueKey(category),
+                                category: category,
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                orElse: () => const LoadingIndicator(),
+              );
+            },
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
